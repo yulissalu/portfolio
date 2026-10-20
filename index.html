@@ -11,143 +11,153 @@
   <link rel="icon" href="assets/images/favicon-dark.png" media="(prefers-color-scheme: dark)">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;1,400&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script>try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 </head>
-<body>
+<body class="page-home">
+  <div class="cursor" aria-hidden="true"></div>
 
-  <header class="site-header container">
-    <h3 class="muted">Yulissa Lu</h3>
-    <div class="tagline">
-      <svg viewBox="0 0 15 14" aria-hidden="true"><path d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13" fill="none" stroke="var(--icon)" stroke-linejoin="bevel"/></svg>
-      <h3>MULTIDISCIPLINARY DESIGNER<br>BASED SEATTLE, WA &amp; PITTSBURGH, PA</h3>
-    </div>
-    <button class="theme-toggle" aria-label="Light/Dark Toggle"></button>
-  </header>
+  <div class="page">
+    <div class="hero-section">
+      <div class="hero-items">
+        <header class="home-nav grid6">
+          <div class="nav-name"><h3 class="muted">Yulissa Lu</h3></div>
+          <div class="nav-desc">
+            <div class="icon-wrap">
+              <svg class="icon" width="15" height="14" viewBox="0 0 15 14" aria-hidden="true"><path class="icon-stroke" d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13"/></svg>
+            </div>
+            <h3>MULTIDISCIPLINARY DESIGNER<br>BASED SEATTLE, WA &amp; PITTSBURGH, PA</h3>
+          </div>
+          <div class="nav-toggle"><button class="theme-toggle" aria-label="Light/Dark Toggle"></button></div>
+        </header>
 
-  <!-- Hero: pills fall in and can be dragged around -->
-  <section class="hero">
-    <div class="physics" aria-hidden="true">
-      <div class="pill square">BHA</div>
-      <div class="pill dot">
-        <svg viewBox="0 0 46 44"><path d="M23.169 29.748 13.398 43.891l-6.515-4.255 10.221-14.603L.481 19.629l2.471-7.015 16.173 5.29V.081h7.863v17.823l16.286-5.29 2.359 7.13-16.51 5.289 10.332 14.489-6.402 4.254z"/></svg>
+        <!-- Falling pills, desktop set. Drag them around. -->
+        <div class="physics physics-big" data-physics="sleep" aria-hidden="true">
+          <div class="body"><div class="pill pill-bha">BHA<span class="dot"></span></div></div>
+          <div class="body"><div class="pill solid pill-star"><svg viewBox="0 0 46 44"><path d="M23.169 29.748 13.398 43.891l-6.515-4.255 10.221-14.603L.481 19.629l2.471-7.015 16.173 5.29V.081h7.863v17.823l16.286-5.29 2.359 7.13-16.51 5.289 10.332 14.489-6.402 4.254z"/></svg></div></div>
+          <div class="body"><div class="pill pill-word">UX/UI DESIGNER</div></div>
+          <div class="body"><div class="pill pill-word">VISUAL ARTIST</div></div>
+          <div class="body"><div class="pill solid pill-arrow"><svg viewBox="0 0 37 49"><path d="M32.138 35.695 28.652 32.221 38.567 22.343 40.892 20.777 40.618 19.959 37.815 20.3H0v-4.973h37.815l2.803.409.274-.818-2.325-1.566-9.915-9.878L32.138 0l16.139 16.077v3.542z" transform="translate(-5.644 6.536) rotate(90 24.25 17.75)"/></svg></div></div>
+          <div class="body"><div class="pill pill-hci">HCI</div></div>
+        </div>
+
+        <!-- Falling pills, tablet/phone set -->
+        <div class="physics physics-small" data-physics="awake" aria-hidden="true">
+          <div class="body"><div class="pill pill-hci">HCI</div></div>
+          <div class="body"><div class="pill solid pill-arrow"><svg viewBox="0 0 11 13"><path d="M8.527 9.509 7.601 8.583 10.232 5.952 10.849 5.535 10.776 5.317 10.032 5.408H0V4.083h10.032l.744.109.073-.218-.617-.417L7.601.925 8.527 0l4.281 4.283v.943z" transform="translate(-1.128 1.715) rotate(90 6.5 4.75)"/></svg></div></div>
+          <div class="body"><div class="pill solid pill-star"><svg viewBox="0 0 15 15"><path d="M7.543 9.972 4.362 14.622 2.241 13.223 5.569 8.422.157 6.645.961 4.338 6.227 6.078V.218h2.56v5.86l5.302-1.74.768 2.345-5.375 1.739 3.364 4.764-2.084 1.399z"/></svg></div></div>
+          <div class="body"><div class="pill pill-visual">VISUAL ARTIST</div></div>
+          <div class="body"><div class="pill pill-ux">UX/UI DESIGNER</div></div>
+          <div class="body"><div class="pill pill-bha">BHA<span class="dot"></span></div></div>
+        </div>
       </div>
-      <div class="pill">UX/UI DESIGNER</div>
-      <div class="pill">VISUAL ARTIST</div>
-      <div class="pill dot">
-        <svg viewBox="0 0 37 49"><path d="M32.138 35.695 28.652 32.221 38.567 22.343 40.892 20.777 40.618 19.959 37.815 20.3H0v-4.973h37.815l2.803.409.274-.818-2.325-1.566-9.915-9.878L32.138 0l16.139 16.077v3.542z" transform="translate(-5.644 6.536) rotate(90 24.25 17.75)"/></svg>
-      </div>
-      <div class="pill square">HCI</div>
     </div>
-    <h1 class="giant-name">YULISSA LU</h1>
-  </section>
 
-  <!-- Glyph Clock (p5.js sketch lives in embeds/glyph-clock.html) -->
-  <section class="container fade-in" style="padding-top: 0">
-    <iframe class="clock-frame" src="embeds/glyph-clock.html" title="Glyph Clock" loading="lazy"></iframe>
-    <p class="caption">Glyph Clock, 2025</p>
-  </section>
-
-  <section class="container fade-in">
-    <div class="about">
-      <h2>Hi, I'm Yulissa, a junior at Carnegie Mellon University.</h2>
-      <p>Major in Fine Art, Decision Science, and Human-Computer Interaction. Interested in UX/UI and graphic design, with skills in designing human-centered experiences and expressive visuals, supported by expertise in UI/UX prototyping, digital illustration, 3D environments, and programming.</p>
+    <div class="hero-text">
+      <svg class="giant-name" viewBox="0 0 1072 221" role="img" aria-label="Yulissa Lu">
+        <foreignObject width="100%" height="100%"><h1>YULISSA LU</h1></foreignObject>
+      </svg>
     </div>
-  </section>
 
-  <section class="container" id="works">
-    <div class="section-head">
-      <h2>Selected Works</h2>
-      <h3 class="muted">2025 - 2026</h3>
-    </div>
+    <!-- Glyph Clock (p5.js sketch lives in embeds/glyph-clock.html) -->
+    <section class="hero-images">
+      <iframe class="clock-frame" src="embeds/glyph-clock.html" title="Glyph Clock"></iframe>
+      <p class="h3 muted">Glyph Clock, 2025</p>
+    </section>
+
+    <section class="home-about grid6">
+      <div class="about-heading"><h2>Hi, I'm Yulissa, a junior at Carnegie Mellon University.</h2></div>
+      <p class="about-text">Major in Fine Art, Decision Science, and Human-Computer Interaction. Interested in UX/UI and graphic design, with skills in designing human-centered experiences and expressive visuals, supported by expertise in UI/UX prototyping, digital illustration, 3D environments, and programming.</p>
+    </section>
 
     <div class="works">
-      <a class="work-card fade-in" href="time-based-media.html">
-        <div class="media">
-          <img src="assets/images/time-based-media-cover.png" alt="Time-Based Media cover">
-          <video src="assets/video/time-based-media-preview.mp4" muted loop playsinline preload="none"></video>
+      <div class="works-header">
+        <div class="works-heading">
+          <h2>Selected Works</h2>
+          <div class="dates"><h3 class="muted">2025 - 2026</h3></div>
         </div>
-        <div class="meta">
-          <h3>Time-Based Media</h3>
-          <h3>Animation</h3>
-          <h3>2025-26</h3>
-        </div>
-      </a>
-
-      <a class="work-card fade-in" href="tsa-design.html">
-        <div class="media">
-          <img src="assets/images/tsa-banner.png" alt="TSA Eclipse banner">
-        </div>
-        <div class="meta">
-          <h3>TSA Design</h3>
-          <h3>Graphic Design</h3>
-          <h3>2025</h3>
-        </div>
-      </a>
-
-      <a class="work-card fade-in" href="interactive-visuals.html">
-        <div class="media">
-          <img src="assets/images/interactive-visuals-cover.png" alt="Interactive Visuals cover">
-        </div>
-        <div class="meta">
-          <h3>Interactive Visuals</h3>
-          <h3>Creative Coding</h3>
-          <h3>2025</h3>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <section class="container fade-in">
-    <div class="playground-teaser">
-      <h2>
-        <a class="arrow-link" href="playground.html">
-          See playground
-          <svg viewBox="0 0 21 20" aria-hidden="true"><path d="M0 0v7.5h13L8.5 3 13 7.5 8.5 12" transform="translate(4 4) rotate(-45 6.5 6)" fill="none" stroke="var(--icon)" stroke-linejoin="bevel"/></svg>
-        </a>
-      </h2>
-      <p>Interdisciplinary creative technologist integrating design, fine art, psychology, and AI, with experience in Adobe Creative Suite, Figma, Blender, TouchDesigner, JavaScript, Python, and generative tools such as ComfyUI to build interactive and research-informed digital work.</p>
-    </div>
-  </section>
-
-  <section class="container experience fade-in">
-    <h2>Experiences</h2>
-    <div class="exp-row">
-      <h3 class="year">2026</h3>
-      <div><p class="role">Content Marketing Intern</p><p class="org">Loova AI</p></div>
-    </div>
-    <div class="exp-row">
-      <h3 class="year">2025</h3>
-      <div><p class="role">AI Research &amp; Design Intern</p><p class="org">Microsoft</p></div>
-    </div>
-    <div class="exp-row">
-      <h3 class="year">2025</h3>
-      <div><p class="role">Teaching Assistant</p><p class="org">Carnegie Mellon University</p></div>
-    </div>
-    <div class="exp-row">
-      <h3 class="year">2025</h3>
-      <div><p class="role">Social Media Specialist</p><p class="org">American Marketing Association</p></div>
-    </div>
-  </section>
-
-  <!-- Footer: same block on every page -->
-  <footer class="site-footer">
-    <div class="container">
-      <h2 class="cta">LET'S GET IN TOUCH</h2>
-      <nav class="footer-links">
-        <a href="mailto:yulissawlu@gmail.com"><h3>Email</h3></a>
-        <a href="https://www.linkedin.com/in/yulissalu/" target="_blank" rel="noopener"><h3>LinkedIn</h3></a>
-        <a href="https://drive.google.com/file/d/1TYutL1owKwUc8M429dawIwB77IbBxhwb/view?usp=share_link" target="_blank" rel="noopener"><h3>Resume</h3></a>
-      </nav>
-      <div class="footer-bottom">
-        <p>© <span data-year></span> Yulissa Lu</p>
-        <p data-clock></p>
       </div>
-    </div>
-  </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+      <section class="works-list">
+        <a class="work-card has-video" href="time-based-media.html">
+          <div class="media">
+            <video src="assets/video/time-based-media-preview.mp4" autoplay muted loop playsinline></video>
+            <figure class="cover"><img src="assets/images/time-based-media-cover.png" alt=""></figure>
+          </div>
+          <div class="caption">
+            <div class="title-cat"><h3>Time-Based Media</h3><h3 class="muted">Animation</h3></div>
+            <h3 class="muted">2025-26</h3>
+          </div>
+        </a>
+
+        <a class="work-card" href="tsa-design.html">
+          <div class="media">
+            <figure class="cover"><img src="assets/images/tsa-banner.png" alt="Banner"></figure>
+          </div>
+          <div class="caption">
+            <div class="title-cat"><h3>TSA Design</h3><h3 class="muted">Graphic Design</h3></div>
+            <h3 class="muted">2025</h3>
+          </div>
+        </a>
+
+        <a class="work-card" href="interactive-visuals.html">
+          <div class="media">
+            <figure class="cover"><img src="assets/images/interactive-visuals-cover.png" alt=""></figure>
+          </div>
+          <div class="caption">
+            <div class="title-cat"><h3>Interactive Visuals</h3><h3 class="muted">Creative Coding</h3></div>
+            <h3 class="muted">2025</h3>
+          </div>
+        </a>
+      </section>
+    </div>
+
+    <section class="home-playground grid6">
+      <div class="pg-heading"><h2><a class="link-underline" href="playground.html">See playground</a></h2></div>
+      <div class="pg-icon">
+        <svg class="icon" width="21" height="20" viewBox="0 0 21 20" aria-hidden="true"><path class="icon-stroke" d="M0 0v7.5h13L8.5 3 13 7.5 8.5 12" transform="translate(4 4) rotate(-45 6.5 6)"/></svg>
+      </div>
+      <p class="pg-body">Interdisciplinary creative technologist integrating design, fine art, psychology, and AI, with experience in Adobe Creative Suite, Figma, Blender, TouchDesigner, JavaScript, Python, and generative tools such as ComfyUI to build interactive and research-informed digital work.</p>
+    </section>
+
+    <div class="experiences">
+      <section class="experiences-grid grid6">
+        <div class="experiences-heading"><h2>Experiences</h2></div>
+        <div class="experiences-list">
+          <div class="exp-item">
+            <h3 class="muted">2026</h3>
+            <div class="exp-desc"><p>Content Marketing Intern</p><p class="muted">Loova AI</p></div>
+          </div>
+          <div class="exp-item">
+            <h3 class="muted">2025</h3>
+            <div class="exp-desc"><p>AI Research &amp; Design Intern</p><p class="muted">Microsoft</p></div>
+          </div>
+          <div class="exp-item">
+            <h3 class="muted">2025</h3>
+            <div class="exp-desc"><p>Teaching Assistant</p><p class="muted">Carnegie Mellon University</p></div>
+          </div>
+          <div class="exp-item">
+            <h3 class="muted">2025</h3>
+            <div class="exp-desc narrow"><p>Social Media Specialist</p><p class="muted">American Marketing Association</p></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer: same block on every page -->
+    <footer class="site-footer grid6">
+      <h3 class="footer-cta">LET'S GET IN TOUCH</h3>
+      <div class="socials">
+        <a class="social" href="mailto:yulissawlu@gmail.com" target="_blank"><h3>Email</h3></a>
+        <a class="social" href="https://www.linkedin.com/in/yulissalu/" target="_blank" rel="noopener"><h3>LinkedIn</h3></a>
+        <a class="social" href="https://drive.google.com/file/d/1TYutL1owKwUc8M429dawIwB77IbBxhwb/view?usp=share_link" target="_blank" rel="noopener"><h3>Resume</h3></a>
+      </div>
+      <p class="clock" data-clock></p>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

@@ -8,6 +8,60 @@
         "value": "space grotesk",
         "createdAt": "2026-10-20T14:38:38.112Z",
         "reason": "Migration fidelity: Space Grotesk is the display font on the user's existing Framer site (yulissalu.com), carried over intentionally"
+      },
+      {
+        "rule": "clipped-overflow-container",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-20T15:01:57.153Z",
+        "reason": "Intentional clipping copied from the original Framer site: the physics stage keeps the falling pills inside the hero and project-card media crops cover images"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-20T15:10:50.248Z",
+        "reason": "User confirmed: asked to replicate the original Framer site exactly, which uses Inter Tight presets at 1.2em line-height"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "tsa-design.html"
+        ],
+        "createdAt": "2026-10-20T15:10:50.265Z",
+        "reason": "User confirmed: asked to replicate the original Framer site exactly, which uses Inter Tight presets at 1.2em line-height"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "time-based-media.html"
+        ],
+        "createdAt": "2026-10-20T15:10:50.279Z",
+        "reason": "User confirmed: asked to replicate the original Framer site exactly, which uses Inter Tight presets at 1.2em line-height"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "interactive-visuals.html"
+        ],
+        "createdAt": "2026-10-20T15:10:50.294Z",
+        "reason": "User confirmed: asked to replicate the original Framer site exactly, which uses Inter Tight presets at 1.2em line-height"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "playground.html"
+        ],
+        "createdAt": "2026-10-20T15:10:50.309Z",
+        "reason": "User confirmed: asked to replicate the original Framer site exactly, which uses Inter Tight presets at 1.2em line-height"
       }
     ]
   }

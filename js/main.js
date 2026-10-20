@@ -1,5 +1,8 @@
-// Shared behavior for every page: theme toggle, live clock, scroll fade-ins,
-// hover videos, playground lightbox, and the falling pills on the homepage.
+// Shared behavior for every page. Each piece mirrors a component from the
+// original Framer site: theme toggle, live clock, custom cursor, falling
+// pills (Matter.js), and the entrance/scroll animations.
+
+const desktopCursor = matchMedia("(hover: hover) and (pointer: fine)");
 
 // ---------- Light/dark toggle ----------
 // The saved choice is applied early by the inline script in each page's <head>.
@@ -25,117 +28,173 @@ function tick() {
 }
 if (clocks.length) { tick(); setInterval(tick, 1000); }
 
-const year = document.querySelector("[data-year]");
-if (year) year.textContent = new Date().getFullYear();
-
-// ---------- Fade in on scroll ----------
-const io = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("is-visible");
-      io.unobserve(entry.target);
+// ---------- Custom cursor ----------
+// 28px ring that trails the pointer on a spring, 20px right of it.
+const cursor = document.querySelector(".cursor");
+if (cursor && desktopCursor.matches) {
+  let tx = 0, ty = 0, x = 0, y = 0, vx = 0, vy = 0, shown = false;
+  const stiffness = 808, damping = 100, mass = 0.2;
+  addEventListener("mousemove", (e) => {
+    tx = e.clientX + 20;
+    ty = e.clientY - 14 + 20;
+    if (!shown) {
+      x = tx; y = ty; shown = true;
+      cursor.style.opacity = 1;
+      document.documentElement.classList.add("cursor-none");
     }
   });
-}, { threshold: 0.12 });
-document.querySelectorAll(".fade-in").forEach((el) => io.observe(el));
-
-// ---------- Play preview videos on hover ----------
-document.querySelectorAll(".work-card").forEach((card) => {
-  const video = card.querySelector("video");
-  if (!video) return;
-  card.addEventListener("mouseenter", () => video.play().catch(() => {}));
-  card.addEventListener("mouseleave", () => video.pause());
-});
-
-// ---------- Playground lightbox ----------
-const lightbox = document.querySelector(".lightbox");
-if (lightbox) {
-  const big = lightbox.appendChild(document.createElement("img"));
-  document.querySelectorAll(".archive-grid img").forEach((img) => {
-    img.addEventListener("click", () => {
-      big.src = img.src;
-      big.alt = img.alt;
-      lightbox.classList.add("open");
-    });
+  document.addEventListener("mouseleave", () => {
+    cursor.style.opacity = 0; shown = false;
+    document.documentElement.classList.remove("cursor-none");
   });
-  lightbox.addEventListener("click", () => lightbox.classList.remove("open"));
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") lightbox.classList.remove("open");
-  });
+  let last = performance.now();
+  (function loop(now) {
+    const dt = Math.min((now - last) / 1000, 1 / 30);
+    last = now;
+    for (let i = 0; i < 4; i++) {
+      const h = dt / 4;
+      vx += ((stiffness * (tx - x) - damping * vx) / mass) * h;
+      vy += ((stiffness * (ty - y) - damping * vy) / mass) * h;
+      x += vx * h;
+      y += vy * h;
+    }
+    cursor.style.transform = `translate(${x}px, ${y}px)`;
+    requestAnimationFrame(loop);
+  })(last);
 }
 
 // ---------- Falling pills (homepage hero) ----------
-// Uses Matter.js. Each .pill element gets a physics body; the DOM element
-// follows it every frame. Pills drop once the hero scrolls into view.
-const stage = document.querySelector(".physics");
-if (stage && window.Matter) {
-  const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Events } = Matter;
-  const engine = Engine.create();
-  engine.gravity.y = 1;
+// Port of the Framer "Physics" component: random start positions, gravity 0.3,
+// walls on all sides, drag with mouse or touch.
+function startPhysics(stage, { sleeping }) {
+  const { Engine, World, Bodies, Composites, Mouse, MouseConstraint, Composite } = Matter;
+  const rect = stage.getBoundingClientRect();
+  const engine = Engine.create({ enableSleeping: sleeping, gravity: { x: 0, y: 0.3 } });
 
-  const pills = [...stage.querySelectorAll(".pill")];
-  let bodies = [];
-  let walls = [];
-  let started = false;
+  const wall = { isStatic: true, friction: 2 };
+  World.add(engine.world, [
+    Bodies.rectangle(rect.width / 2, rect.height + 50, rect.width + 100, 100, wall),
+    Bodies.rectangle(rect.width / 2, -50, rect.width + 100, 100, wall),
+    Bodies.rectangle(rect.width + 50, rect.height / 2, 100, rect.height, wall),
+    Bodies.rectangle(-50, rect.height / 2, 100, rect.height, wall),
+  ]);
 
-  function buildWalls() {
-    Composite.remove(engine.world, walls);
-    const w = stage.clientWidth;
-    const h = stage.clientHeight;
-    const t = 200;
-    walls = [
-      Bodies.rectangle(w / 2, h + t / 2, w * 3, t, { isStatic: true }),
-      Bodies.rectangle(-t / 2, h / 2, t, h * 4, { isStatic: true }),
-      Bodies.rectangle(w + t / 2, h / 2, t, h * 4, { isStatic: true }),
-    ];
-    Composite.add(engine.world, walls);
-  }
+  const mouse = Mouse.create(stage);
+  const drag = MouseConstraint.create(engine, {
+    mouse,
+    constraint: { angularStiffness: 0, stiffness: 1 },
+  });
+  Composite.add(engine.world, drag);
+  ["mousewheel", "DOMMouseScroll", "touchstart", "touchmove", "touchend"].forEach((type) =>
+    drag.mouse.element.removeEventListener(type, drag.mouse[type])
+  );
+  stage.addEventListener("touchstart", drag.mouse.mousedown, { passive: true });
+  stage.addEventListener("touchmove", (e) => { if (drag.body) drag.mouse.mousemove(e); });
+  stage.addEventListener("touchend", (e) => { if (drag.body) drag.mouse.mouseup(e); });
+  stage.addEventListener("mouseleave", (e) => drag.mouse.mouseup(e));
 
-  function drop() {
-    if (started) return;
-    started = true;
-    const w = stage.clientWidth;
-    bodies = pills.map((el, i) => {
-      const bw = el.offsetWidth;
-      const bh = el.offsetHeight;
-      const x = (w / (pills.length + 1)) * (i + 1);
-      const y = -100 - i * 90;
-      const opts = { restitution: 0.4, friction: 0.3, angle: (Math.random() - 0.5) * 0.6 };
-      const body = el.classList.contains("dot")
-        ? Bodies.circle(x, y, bw / 2, opts)
-        : Bodies.rectangle(x, y, bw, bh, { ...opts, chamfer: { radius: Math.min(bh / 2, el.classList.contains("square") ? 19 : bh / 2) } });
-      body.el = el;
-      return body;
-    });
-    Composite.add(engine.world, bodies);
-    Runner.run(Runner.create(), engine);
-  }
-
-  Events.on(engine, "afterUpdate", () => {
-    bodies.forEach((b) => {
-      const { x, y } = b.position;
-      b.el.style.transform =
-        `translate(${x - b.el.offsetWidth / 2}px, ${y - b.el.offsetHeight / 2}px) rotate(${b.angle}rad)`;
+  const els = [...stage.children];
+  const stack = Composites.stack(0, 0, els.length, 1, 0, 0, (sx, sy, i) => {
+    const { width, height } = els[i].getBoundingClientRect();
+    const x = Math.floor(Math.random() * (rect.width - width));
+    const y = Math.floor(Math.random() * (rect.height - height));
+    return Bodies.rectangle(x, y, width, height, {
+      isStatic: false, density: 0.001, friction: 0.05, frictionAir: 0.01,
     });
   });
+  World.add(engine.world, stack);
 
-  // Drag pills with the mouse (or a finger)
-  const mouse = Mouse.create(stage);
-  mouse.element.removeEventListener("mousewheel", mouse.mousewheel);
-  mouse.element.removeEventListener("DOMMouseScroll", mouse.mousewheel);
-  mouse.element.removeEventListener("wheel", mouse.mousewheel);
-  Composite.add(engine.world, MouseConstraint.create(engine, {
-    mouse,
-    constraint: { stiffness: 0.2, render: { visible: false } },
-  }));
+  (function frame() {
+    requestAnimationFrame(frame);
+    stack.bodies.forEach((body, i) => {
+      const el = els[i];
+      const { x, y } = body.vertices[0];
+      el.style.visibility = "visible";
+      el.style.top = `${y}px`;
+      el.style.left = `${x}px`;
+      el.style.transform = `translate(-50%, -50%) rotate(${body.angle}rad) translate(50%, 50%)`;
+    });
+    Engine.update(engine);
+  })();
+}
 
-  // Hide pills above the stage until they drop
-  pills.forEach((el) => (el.style.transform = "translate(-9999px, -9999px)"));
+if (window.Matter) {
+  const stages = [...document.querySelectorAll("[data-physics]")];
+  const started = new Set();
+  const startVisible = () => {
+    stages.forEach((stage) => {
+      if (started.has(stage) || stage.offsetParent === null) return;
+      started.add(stage);
+      startPhysics(stage, { sleeping: stage.dataset.physics === "sleep" });
+    });
+  };
+  if (document.fonts) document.fonts.ready.then(startVisible); else startVisible();
+  addEventListener("resize", startVisible);
+}
 
-  buildWalls();
-  window.addEventListener("resize", buildWalls);
+// ---------- Homepage project list fades in after 1.2s ----------
+const worksList = document.querySelector(".works-list");
+if (worksList) setTimeout(() => worksList.classList.add("is-visible"), 1200);
 
-  new IntersectionObserver((entries, obs) => {
-    if (entries[0].isIntersecting) { drop(); obs.disconnect(); }
-  }, { threshold: 0.3 }).observe(stage);
+// ---------- Project page entrance animations ----------
+// Title words slide up, "OVERVIEW" letters rise in, the paragraph floats up.
+function animate(el, keyframes, options) {
+  if (!el.animate || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  el.animate(keyframes, { fill: "backwards", ...options });
+}
+
+document.querySelectorAll("[data-split-words]").forEach((el) => {
+  const words = el.textContent.trim().split(/\s+/);
+  el.innerHTML = words.map((w) => `<span style="display:inline-block">${w}</span>`).join(" ");
+  el.querySelectorAll("span").forEach((span, i) =>
+    animate(span, [{ transform: "translateY(91px)" }, { transform: "none" }], {
+      duration: 900, delay: 75 + i * 75, easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+    })
+  );
+});
+
+document.querySelectorAll("[data-split-letters]").forEach((el) => {
+  const letters = [...el.textContent];
+  el.innerHTML = letters.map((c) => `<span style="display:inline-block">${c === " " ? "&nbsp;" : c}</span>`).join("");
+  el.querySelectorAll("span").forEach((span, i) =>
+    animate(span, [{ opacity: 0.62, transform: "translateY(100px)" }, { opacity: 1, transform: "none" }], {
+      duration: 1000, delay: i * 10, easing: "cubic-bezier(0.25, 0.45, 0.3, 0.73)",
+    })
+  );
+});
+
+document.querySelectorAll("[data-rise]").forEach((el) =>
+  animate(el, [
+    { opacity: 0.2, transform: "perspective(1200px) translateY(150px)" },
+    { opacity: 1, transform: "perspective(1200px) translateY(0)" },
+  ], { duration: 1200, delay: 200, easing: "cubic-bezier(0.25, 0.45, 0.26, 0.95)" })
+);
+
+// ---------- YouTube: show the thumbnail, load the player on click ----------
+document.querySelectorAll("[data-youtube]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const iframe = document.createElement("iframe");
+    iframe.className = btn.className;
+    iframe.style.cssText = btn.style.cssText;
+    iframe.src = `https://www.youtube.com/embed/${btn.dataset.youtube}?autoplay=1&iv_load_policy=3&rel=0&modestbranding=1&playsinline=1`;
+    iframe.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    iframe.allowFullscreen = true;
+    btn.replaceWith(iframe);
+  });
+});
+
+// ---------- Playground: images settle from 110% to 100% while scrolling ----------
+const zooms = [...document.querySelectorAll(".archive-image .zoom")];
+if (zooms.length && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const update = () => {
+    const vh = innerHeight;
+    zooms.forEach((el) => {
+      const r = el.parentElement.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));
+      el.style.transform = `perspective(1200px) translateY(${44 * p}px) scale(${1.1 - 0.1 * p})`;
+    });
+  };
+  // Like the original, images start at 110% and only react once you scroll.
+  addEventListener("scroll", update, { passive: true });
+  addEventListener("resize", update);
 }

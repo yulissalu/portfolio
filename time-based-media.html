@@ -9,83 +9,107 @@
   <link rel="icon" href="assets/images/favicon-dark.png" media="(prefers-color-scheme: dark)">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;1,400&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script>try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 </head>
-<body>
+<body class="page-project page-tbm">
+  <div class="cursor" aria-hidden="true"></div>
 
-  <header class="site-header container">
-    <nav class="breadcrumb">
-      <a href="index.html"><h3>Home</h3></a><h3>/</h3>
-      <a href="index.html#works"><h3>Works</h3></a><h3>/</h3>
-      <span><h3>Time-Based Media</h3></span>
-    </nav>
-    <button class="theme-toggle" aria-label="Light/Dark Toggle"></button>
-  </header>
-
-  <main class="container">
-    <h1 class="project-title">Time-Based<br>Media</h1>
-
-    <div class="overview">
-      <span class="label">OVERVIEW</span>
-      <p>Immersive virtual worlds and narrative films created with Blender, TouchDesigner, After Effects, and Premiere Pro.</p>
-    </div>
-
-    <div class="cover fade-in">
-      <img src="assets/images/time-based-media-cover.png" alt="Time-Based Media cover">
-    </div>
-
-    <div class="facts">
-      <div><span class="label">YEAR</span><p>2025-26</p></div>
-      <div><span class="label">ROLE</span><p>Creative Director</p></div>
-      <div><span class="label">SERVICES</span><p>Animation<br>Video Editing<br>Motion Design</p></div>
-    </div>
-
-    <section>
-      <h2>About the project</h2>
-
-      <div class="gallery two-col">
-        <figure class="fade-in">
-          <iframe class="embed" src="https://www.youtube.com/embed/bnyT6b8xZhg?rel=0&amp;modestbranding=1&amp;playsinline=1" title="Cyborg" loading="lazy" allowfullscreen></iframe>
-          <figcaption><h3>Cyborg (2026)</h3></figcaption>
-        </figure>
-        <figure class="fade-in">
-          <iframe class="embed" src="https://www.youtube.com/embed/feTpakd926s?rel=0&amp;modestbranding=1&amp;playsinline=1" title="Mr. Brighside Lyric Video" loading="lazy" allowfullscreen></iframe>
-          <figcaption><h3>Mr. Brighside Lyric Video (2026)</h3></figcaption>
-        </figure>
-        <figure class="fade-in">
-          <iframe class="embed" src="https://www.youtube.com/embed/42tW-ST4Vx0?rel=0&amp;modestbranding=1&amp;playsinline=1" title="TouchDesigner Flower" loading="lazy" allowfullscreen></iframe>
-          <figcaption><h3>TouchDesigner Flower (2025)</h3></figcaption>
-        </figure>
-        <figure class="fade-in">
-          <iframe class="embed" src="https://www.youtube.com/embed/LaW_WzPVxGk?rel=0&amp;modestbranding=1&amp;playsinline=1" title="Dawnfall" loading="lazy" allowfullscreen></iframe>
-          <figcaption><h3>Dawnfall (2025)</h3></figcaption>
-        </figure>
+  <div class="page">
+    <nav class="project-nav grid6">
+      <div class="crumbs">
+        <a class="link-muted" href="index.html"><h3>Home</h3></a>
+        <svg class="icon" viewBox="0 0 15 14" aria-hidden="true"><path class="icon-stroke" d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13"/></svg>
+        <a class="link-muted" href="index.html"><h3>Works</h3></a>
+        <svg class="icon" viewBox="0 0 15 14" aria-hidden="true"><path class="icon-stroke" d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13"/></svg>
+        <h3 class="current">Time-Based Media</h3>
       </div>
+      <div class="nav-toggle"><button class="theme-toggle" aria-label="Light/Dark Toggle"></button></div>
+    </nav>
+
+    <article class="project-hero grid6">
+      <div class="hero-heading"><h2 data-split-words>Time-Based Media</h2></div>
+      <div class="hero-overview">
+        <div class="overview-label" data-split-letters>OVERVIEW</div>
+        <p data-rise>Immersive virtual worlds and narrative films created with Blender, TouchDesigner, After Effects, and Premiere Pro.</p>
+      </div>
+      <div class="hero-icon">
+        <div class="round-icon"><svg viewBox="0 0 11 15" aria-hidden="true"><path class="icon-fill" d="M9.838 10.907 8.771 9.845 11.806 6.827 12.518 6.348 12.434 6.099 11.576 6.203H0V4.683h11.576l.858.125.084-.25-.712-.478L8.771 1.062 9.838 0l4.941 4.912v1.083z" transform="translate(-1.891 2.011) rotate(90 7.5 5.5)"/></svg></div>
+      </div>
+    </article>
+
+    <div class="hero-images-row grid6">
+      <figure class="primary-image"><img src="assets/images/time-based-media-cover.png" alt=""></figure>
+    </div>
+
+    <section class="information grid6">
+      <div class="info-icon"><svg class="icon" width="15" height="14" viewBox="0 0 15 14" aria-hidden="true"><path class="icon-stroke" d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13"/></svg></div>
+      <div class="info info-date"><h3 class="muted">YEAR</h3><p>2025-26</p></div>
+      <div class="info info-role"><h3 class="muted">ROLE</h3><p>Creative Director</p></div>
+      <div class="info info-services"><h3 class="muted">SERVICES</h3><div><p>Animation<br>Video Editing<br>Motion Design</p></div></div>
     </section>
 
-    <nav class="project-nav">
-      <a href="index.html"><h3>← BACK TO HOME</h3></a>
-      <a href="interactive-visuals.html"><h3>NEXT PROJECT →</h3></a>
-    </nav>
-  </main>
+    <section class="project-about grid6">
+      <div class="about-heading"><h2>About the project</h2></div>
+      <div class="about-icon"><svg class="icon" width="15" height="14" viewBox="0 0 15 14" aria-hidden="true"><path class="icon-stroke" d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13"/></svg></div>
+    </section>
 
-  <!-- Footer: same block on every page -->
-  <footer class="site-footer">
-    <div class="container">
-      <h2 class="cta">LET'S GET IN TOUCH</h2>
-      <nav class="footer-links">
-        <a href="mailto:yulissawlu@gmail.com"><h3>Email</h3></a>
-        <a href="https://www.linkedin.com/in/yulissalu/" target="_blank" rel="noopener"><h3>LinkedIn</h3></a>
-        <a href="https://drive.google.com/file/d/1TYutL1owKwUc8M429dawIwB77IbBxhwb/view?usp=share_link" target="_blank" rel="noopener"><h3>Resume</h3></a>
-      </nav>
-      <div class="footer-bottom">
-        <p>© <span data-year></span> Yulissa Lu</p>
-        <p data-clock></p>
+    <div class="project-grid grid6">
+      <div class="media-item">
+        <button class="video yt ratio-a" data-youtube="bnyT6b8xZhg" aria-label="Play Cyborg (2026)">
+          <img src="https://i.ytimg.com/vi_webp/bnyT6b8xZhg/sddefault.webp" alt="">
+          <svg class="yt-play" viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#212121" fill-opacity=".8"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+        </button>
+        <h3 class="muted">Cyborg (2026)</h3>
+      </div>
+      <div class="media-item">
+        <button class="video yt ratio-b" data-youtube="feTpakd926s" aria-label="Play Mr. Brighside Lyric Video (2026)">
+          <img src="https://i.ytimg.com/vi_webp/feTpakd926s/sddefault.webp" alt="">
+          <svg class="yt-play" viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#212121" fill-opacity=".8"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+        </button>
+        <h3 class="muted">Mr. Brighside Lyric Video (2026)</h3>
       </div>
     </div>
-  </footer>
+    <div class="project-grid grid6">
+      <div class="media-item">
+        <button class="video yt ratio-a" data-youtube="42tW-ST4Vx0" aria-label="Play TouchDesigner Flower (2025)">
+          <img src="https://i.ytimg.com/vi_webp/42tW-ST4Vx0/sddefault.webp" alt="">
+          <svg class="yt-play" viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#212121" fill-opacity=".8"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+        </button>
+        <h3 class="muted">TouchDesigner Flower (2025)</h3>
+      </div>
+      <div class="media-item">
+        <button class="video yt ratio-b" data-youtube="LaW_WzPVxGk" aria-label="Play Dawnfall (2025)">
+          <img src="https://i.ytimg.com/vi_webp/LaW_WzPVxGk/sddefault.webp" alt="">
+          <svg class="yt-play" viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#212121" fill-opacity=".8"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+        </button>
+        <h3 class="muted">Dawnfall (2025)</h3>
+      </div>
+    </div>
+
+    <nav class="back-next grid6">
+      <div class="back">
+        <svg viewBox="0 0 15 11" aria-hidden="true"><path class="icon-fill" d="M9.838 10.907 8.771 9.845 11.806 6.827 12.518 6.348 12.434 6.099 11.576 6.203H0V4.683h11.576l.858.125.084-.25-.712-.478L8.771 1.062 9.838 0l4.941 4.912v1.083z" transform="translate(0.109 0.011) rotate(180 7.5 5.5)"/></svg>
+        <p class="h3"><a class="link-muted" href="index.html">BACK TO HOME</a></p>
+      </div>
+      <div class="next">
+        <p class="h3"><a class="link-muted" href="interactive-visuals.html">NEXT PROJECT</a></p>
+        <svg viewBox="0 0 15 11" aria-hidden="true"><path class="icon-fill" d="M9.838 10.907 8.771 9.845 11.806 6.827 12.518 6.348 12.434 6.099 11.576 6.203H0V4.683h11.576l.858.125.084-.25-.712-.478L8.771 1.062 9.838 0l4.941 4.912v1.083z" transform="translate(0.109 0.011)"/></svg>
+      </div>
+    </nav>
+
+    <!-- Footer: same block on every page -->
+    <footer class="site-footer grid6">
+      <h3 class="footer-cta">LET'S GET IN TOUCH</h3>
+      <div class="socials">
+        <a class="social" href="mailto:yulissawlu@gmail.com" target="_blank"><h3>Email</h3></a>
+        <a class="social" href="https://www.linkedin.com/in/yulissalu/" target="_blank" rel="noopener"><h3>LinkedIn</h3></a>
+        <a class="social" href="https://drive.google.com/file/d/1TYutL1owKwUc8M429dawIwB77IbBxhwb/view?usp=share_link" target="_blank" rel="noopener"><h3>Resume</h3></a>
+      </div>
+      <p class="clock" data-clock></p>
+    </footer>
+  </div>
 
   <script src="js/main.js"></script>
 </body>

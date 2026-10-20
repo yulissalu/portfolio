@@ -9,60 +9,121 @@
   <link rel="icon" href="assets/images/favicon-dark.png" media="(prefers-color-scheme: dark)">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;1,400&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script>try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 </head>
-<body>
+<body class="page-playground">
+  <div class="cursor" aria-hidden="true"></div>
 
-  <header class="site-header container">
-    <a href="mailto:yulissawlu@gmail.com"><h3 class="muted">yulissawlu@gmail.com</h3></a>
-    <div class="site-nav">
-      <a href="index.html"><h3>← BACK TO HOME</h3></a>
-      <button class="theme-toggle" aria-label="Light/Dark Toggle"></button>
-    </div>
-  </header>
-
-  <main class="container">
-    <div class="overview" style="margin: 40px 0 48px">
-      <h1 class="project-title" style="margin: 0 0 16px">Archived works</h1>
-      <p class="muted">Series of past traditional painting, drawing and ceramics works I've made over the years.</p>
+  <div class="page">
+    <div class="pg-nav">
+      <header class="grid6">
+        <a class="nav-email" href="mailto:yulissawlu@gmail.com"><h3 class="muted">yulissawulu@gmail.com</h3></a>
+        <div class="nav-back"><h3><a class="link-muted" href="index.html">BACK TO HOME</a></h3></div>
+        <div class="nav-toggle"><button class="theme-toggle" aria-label="Light/Dark Toggle"></button></div>
+      </header>
     </div>
 
-    <!-- Click an image to view it larger -->
-    <div class="archive-grid">
-      <figure><img src="assets/images/playground/abyss.jpg" alt="Abyss" loading="lazy"><figcaption>Abyss</figcaption></figure>
-      <figure><img src="assets/images/playground/a-safe-resting-place.png" alt="A Safe Resting Place" loading="lazy"><figcaption>A Safe Resting Place</figcaption></figure>
-      <figure><img src="assets/images/playground/fleeting-dream.jpg" alt="Fleeting Dream" loading="lazy"><figcaption>Fleeting Dream</figcaption></figure>
-      <figure><img src="assets/images/playground/look.jpg" alt="LOOK" loading="lazy"><figcaption>LOOK</figcaption></figure>
-      <figure><img src="assets/images/playground/the-grand-scheme.png" alt="The Grand Scheme" loading="lazy"><figcaption>The Grand Scheme</figcaption></figure>
-      <figure><img src="assets/images/playground/vacuum.png" alt="Vacuum" loading="lazy"><figcaption>Vacuum</figcaption></figure>
-      <figure><img src="assets/images/playground/immortality.jpg" alt="Immortality" loading="lazy"><figcaption>Immortality</figcaption></figure>
-      <figure><img src="assets/images/playground/abandoned.jpg" alt="Abandoned" loading="lazy"><figcaption>Abandoned</figcaption></figure>
-      <figure><img src="assets/images/playground/everyday-routine.png" alt="Everyday Routine" loading="lazy"><figcaption>Everyday Routine</figcaption></figure>
-      <figure><img src="assets/images/playground/cerberus.jpg" alt="Cerberus" loading="lazy"><figcaption>Cerberus</figcaption></figure>
-      <figure><img src="assets/images/playground/contemplation.jpg" alt="Contemplation" loading="lazy"><figcaption>Contemplation</figcaption></figure>
-      <figure><img src="assets/images/playground/unplanned-obsolescence.jpg" alt="Unplanned Obsolescence" loading="lazy"><figcaption>Unplanned Obsolescence</figcaption></figure>
+    <div class="pg-header">
+      <section class="pg-main grid6">
+        <div class="pg-heading"><h2>Archived works</h2></div>
+        <div class="pg-icon"><svg class="icon" width="15" height="14" viewBox="0 0 15 14" aria-hidden="true"><path class="icon-stroke" d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13"/></svg></div>
+        <p class="pg-body">Series of past traditional painting, drawing and ceramics works I've made over the years.</p>
+      </section>
     </div>
-  </main>
 
-  <div class="lightbox" role="dialog" aria-label="Enlarged artwork"></div>
-
-  <!-- Footer: same block on every page -->
-  <footer class="site-footer">
-    <div class="container">
-      <h2 class="cta">LET'S GET IN TOUCH</h2>
-      <nav class="footer-links">
-        <a href="mailto:yulissawlu@gmail.com"><h3>Email</h3></a>
-        <a href="https://www.linkedin.com/in/yulissalu/" target="_blank" rel="noopener"><h3>LinkedIn</h3></a>
-        <a href="https://drive.google.com/file/d/1TYutL1owKwUc8M429dawIwB77IbBxhwb/view?usp=share_link" target="_blank" rel="noopener"><h3>Resume</h3></a>
-      </nav>
-      <div class="footer-bottom">
-        <p>© <span data-year></span> Yulissa Lu</p>
-        <p data-clock></p>
+    <!-- Each artwork: data-offset is how many columns it shifts right (0, 2 or 3) -->
+    <div class="archive">
+      <div class="archive-list">
+        <div class="archive-item" data-offset="0">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/abyss.jpg" alt="Abyss" loading="lazy"></div></figure>
+            <p>Abyss</p>
+          </div>
+        </div>
+        <div class="archive-item" data-offset="2">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/a-safe-resting-place.png" alt="A Safe Resting Place" loading="lazy"></div></figure>
+            <p>A Safe Resting Place</p>
+          </div>
+        </div>
+        <div class="archive-item" data-offset="3">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/fleeting-dream.jpg" alt="Fleeting Dream" loading="lazy"></div></figure>
+            <p>Fleeting Dream</p>
+          </div>
+        </div>
+        <div class="archive-item" data-offset="0">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/look.jpg" alt="LOOK" loading="lazy"></div></figure>
+            <p>LOOK</p>
+          </div>
+        </div>
+        <div class="archive-item" data-offset="0">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/the-grand-scheme.png" alt="The Grand Scheme" loading="lazy"></div></figure>
+            <p>The Grand Scheme</p>
+          </div>
+        </div>
+        <div class="archive-item" data-offset="3">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/vacuum.png" alt="Vacuum" loading="lazy"></div></figure>
+            <p>Vacuum</p>
+          </div>
+        </div>
+        <div class="archive-item" data-offset="0">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/immortality.jpg" alt="Immortality" loading="lazy"></div></figure>
+            <p>Immortality</p>
+          </div>
+        </div>
+        <div class="archive-item" data-offset="3">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/abandoned.jpg" alt="Abandoned" loading="lazy"></div></figure>
+            <p>Abandoned</p>
+          </div>
+        </div>
+        <div class="archive-item" data-offset="0">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/everyday-routine.png" alt="Everyday Routine" loading="lazy"></div></figure>
+            <p>Everyday Routine</p>
+          </div>
+        </div>
+        <div class="archive-item" data-offset="3">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/cerberus.jpg" alt="Cerberus" loading="lazy"></div></figure>
+            <p>Cerberus</p>
+          </div>
+        </div>
+        <div class="archive-item" data-offset="0">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/contemplation.jpg" alt="Contemplation" loading="lazy"></div></figure>
+            <p>Contemplation</p>
+          </div>
+        </div>
+        <div class="archive-item" data-offset="0">
+          <div class="archive-content">
+            <figure class="archive-image"><div class="zoom"><img src="assets/images/playground/unplanned-obsolescence.jpg" alt="Unplanned Obsolescence" loading="lazy"></div></figure>
+            <p>Unplanned Obsolescence</p>
+          </div>
+        </div>
       </div>
     </div>
-  </footer>
+
+    <div class="pg-footer">
+    <!-- Footer: same block on every page -->
+    <footer class="site-footer grid6">
+      <h3 class="footer-cta">LET'S GET IN TOUCH</h3>
+      <div class="socials">
+        <a class="social" href="mailto:yulissawlu@gmail.com" target="_blank"><h3>Email</h3></a>
+        <a class="social" href="https://www.linkedin.com/in/yulissalu/" target="_blank" rel="noopener"><h3>LinkedIn</h3></a>
+        <a class="social" href="https://drive.google.com/file/d/1TYutL1owKwUc8M429dawIwB77IbBxhwb/view?usp=share_link" target="_blank" rel="noopener"><h3>Resume</h3></a>
+      </div>
+      <p class="clock" data-clock></p>
+    </footer>
+    </div>
+  </div>
 
   <script src="js/main.js"></script>
 </body>

@@ -9,75 +9,89 @@
   <link rel="icon" href="assets/images/favicon-dark.png" media="(prefers-color-scheme: dark)">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;1,400&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script>try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 </head>
-<body>
+<body class="page-project">
+  <div class="cursor" aria-hidden="true"></div>
 
-  <header class="site-header container">
-    <nav class="breadcrumb">
-      <a href="index.html"><h3>Home</h3></a><h3>/</h3>
-      <a href="index.html#works"><h3>Works</h3></a><h3>/</h3>
-      <span><h3>TSA Design</h3></span>
-    </nav>
-    <button class="theme-toggle" aria-label="Light/Dark Toggle"></button>
-  </header>
-
-  <main class="container">
-    <h1 class="project-title">TSA<br>Design</h1>
-
-    <div class="overview">
-      <span class="label">OVERVIEW</span>
-      <p>As Design Chair of Carnegie Mellon’s Taiwanese Student Association, I directed the organization’s visual identity, developing branding systems, promotional materials, and social media assets to support storytelling rooted in shared heritage and community.</p>
-    </div>
-
-    <div class="cover fade-in">
-      <img src="assets/images/tsa-banner.png" alt="TSA Eclipse banner">
-    </div>
-
-    <div class="facts">
-      <div><span class="label">YEAR</span><p>2025</p></div>
-      <div><span class="label">ROLE</span><p>Design Chair</p></div>
-      <div><span class="label">SERVICES</span><p>Graphic Design<br>Product Design<br>Social Media Marketing</p></div>
-    </div>
-
-    <section>
-      <div class="project-body">
-        <h2>About the project</h2>
-        <h3>TSA Eclipse</h3>
-        <p>TSA Culture Night is Carnegie Mellon University’s annual cross-cultural showcase hosted by the Taiwanese Student Association. An eclipse says: we each carry our own light, and when we align, the world stops to look. That’s the heart of TSA Culture Night. In this project, I created visual branding that’s powerful, bold, and adorned with a hint of mystery to celebrate cultures coming together to light up the moment during CMU’s highly anticipated Culture Night event.</p>
+  <div class="page">
+    <nav class="project-nav grid6">
+      <div class="crumbs">
+        <a class="link-muted" href="index.html"><h3>Home</h3></a>
+        <svg class="icon" viewBox="0 0 15 14" aria-hidden="true"><path class="icon-stroke" d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13"/></svg>
+        <a class="link-muted" href="index.html"><h3>Works</h3></a>
+        <svg class="icon" viewBox="0 0 15 14" aria-hidden="true"><path class="icon-stroke" d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13"/></svg>
+        <h3 class="current">TSA Design</h3>
       </div>
+      <div class="nav-toggle"><button class="theme-toggle" aria-label="Light/Dark Toggle"></button></div>
+    </nav>
 
-      <div class="gallery">
-        <img class="fade-in" src="assets/images/tsa-1.png" alt="TSA Eclipse branding" loading="lazy">
-        <img class="fade-in" src="assets/images/tsa-2.png" alt="TSA Eclipse branding" loading="lazy">
-        <img class="fade-in" src="assets/images/tsa-3.png" alt="TSA Eclipse branding" loading="lazy">
-        <img class="fade-in" src="assets/images/tsa-4.png" alt="TSA Eclipse branding" loading="lazy">
+    <article class="project-hero grid6">
+      <div class="hero-heading"><h2 data-split-words>TSA Design</h2></div>
+      <div class="hero-overview">
+        <div class="overview-label" data-split-letters>OVERVIEW</div>
+        <p data-rise>As Design Chair of Carnegie Mellon’s Taiwanese Student Association, I directed the organization’s visual identity, developing branding systems, promotional materials, and social media assets to support storytelling rooted in shared heritage and community.</p>
+      </div>
+      <div class="hero-icon">
+        <div class="round-icon"><svg viewBox="0 0 11 15" aria-hidden="true"><path class="icon-fill" d="M9.838 10.907 8.771 9.845 11.806 6.827 12.518 6.348 12.434 6.099 11.576 6.203H0V4.683h11.576l.858.125.084-.25-.712-.478L8.771 1.062 9.838 0l4.941 4.912v1.083z" transform="translate(-1.891 2.011) rotate(90 7.5 5.5)"/></svg></div>
+      </div>
+    </article>
+
+    <div class="hero-images-row grid6">
+      <figure class="primary-image"><img src="assets/images/tsa-banner.png" alt="Banner"></figure>
+    </div>
+
+    <section class="information grid6">
+      <div class="info-icon"><svg class="icon" width="15" height="14" viewBox="0 0 15 14" aria-hidden="true"><path class="icon-stroke" d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13"/></svg></div>
+      <div class="info info-date"><h3 class="muted">YEAR</h3><p>2025</p></div>
+      <div class="info info-role"><h3 class="muted">ROLE</h3><p>Design Chair</p></div>
+      <div class="info info-services"><h3 class="muted">SERVICES</h3><div><p>Graphic Design<br>Product Design<br>Social Media Marketing</p><p><br></p></div></div>
+    </section>
+
+    <section class="project-about grid6">
+      <div class="about-heading"><h2>About the project</h2></div>
+      <div class="about-icon"><svg class="icon" width="15" height="14" viewBox="0 0 15 14" aria-hidden="true"><path class="icon-stroke" d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13"/></svg></div>
+      <div class="about-description">
+        <div>
+          <h3 class="about-title">TSA Eclipse</h3>
+          <p>TSA Culture Night is Carnegie Mellon University’s annual cross-cultural showcase hosted by the Taiwanese Student Association. An eclipse says: we each carry our own light, and when we align, the world stops to look. That’s the heart of TSA Culture Night. In this project, I created visual branding that’s powerful, bold, and adorned with a hint of mystery to celebrate cultures coming together to light up the moment during CMU’s highly anticipated Culture Night event.</p>
+        </div>
       </div>
     </section>
 
-    <nav class="project-nav">
-      <a href="index.html"><h3>← BACK TO HOME</h3></a>
-      <a href="time-based-media.html"><h3>NEXT PROJECT →</h3></a>
-    </nav>
-  </main>
-
-  <!-- Footer: same block on every page -->
-  <footer class="site-footer">
-    <div class="container">
-      <h2 class="cta">LET'S GET IN TOUCH</h2>
-      <nav class="footer-links">
-        <a href="mailto:yulissawlu@gmail.com"><h3>Email</h3></a>
-        <a href="https://www.linkedin.com/in/yulissalu/" target="_blank" rel="noopener"><h3>LinkedIn</h3></a>
-        <a href="https://drive.google.com/file/d/1TYutL1owKwUc8M429dawIwB77IbBxhwb/view?usp=share_link" target="_blank" rel="noopener"><h3>Resume</h3></a>
-      </nav>
-      <div class="footer-bottom">
-        <p>© <span data-year></span> Yulissa Lu</p>
-        <p data-clock></p>
-      </div>
+    <div class="project-grid grid6 stack">
+      <figure class="shot"><img src="assets/images/tsa-1.png" alt=""></figure>
+      <figure class="shot" style="aspect-ratio: 1.78354"><img src="assets/images/tsa-2.png" alt=""></figure>
     </div>
-  </footer>
+    <div class="project-grid grid6 stack">
+      <figure class="shot"><img src="assets/images/tsa-3.png" alt=""></figure>
+      <figure class="shot" style="aspect-ratio: 1.78354"><img src="assets/images/tsa-4.png" alt=""></figure>
+    </div>
+
+    <nav class="back-next grid6">
+      <div class="back">
+        <svg viewBox="0 0 15 11" aria-hidden="true"><path class="icon-fill" d="M9.838 10.907 8.771 9.845 11.806 6.827 12.518 6.348 12.434 6.099 11.576 6.203H0V4.683h11.576l.858.125.084-.25-.712-.478L8.771 1.062 9.838 0l4.941 4.912v1.083z" transform="translate(0.109 0.011) rotate(180 7.5 5.5)"/></svg>
+        <p class="h3"><a class="link-muted" href="index.html">BACK TO HOME</a></p>
+      </div>
+      <div class="next">
+        <p class="h3"><a class="link-muted" href="time-based-media.html">NEXT PROJECT</a></p>
+        <svg viewBox="0 0 15 11" aria-hidden="true"><path class="icon-fill" d="M9.838 10.907 8.771 9.845 11.806 6.827 12.518 6.348 12.434 6.099 11.576 6.203H0V4.683h11.576l.858.125.084-.25-.712-.478L8.771 1.062 9.838 0l4.941 4.912v1.083z" transform="translate(0.109 0.011)"/></svg>
+      </div>
+    </nav>
+
+    <!-- Footer: same block on every page -->
+    <footer class="site-footer grid6">
+      <h3 class="footer-cta">LET'S GET IN TOUCH</h3>
+      <div class="socials">
+        <a class="social" href="mailto:yulissawlu@gmail.com" target="_blank"><h3>Email</h3></a>
+        <a class="social" href="https://www.linkedin.com/in/yulissalu/" target="_blank" rel="noopener"><h3>LinkedIn</h3></a>
+        <a class="social" href="https://drive.google.com/file/d/1TYutL1owKwUc8M429dawIwB77IbBxhwb/view?usp=share_link" target="_blank" rel="noopener"><h3>Resume</h3></a>
+      </div>
+      <p class="clock" data-clock></p>
+    </footer>
+  </div>
 
   <script src="js/main.js"></script>
 </body>

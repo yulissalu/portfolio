@@ -2,34 +2,46 @@
 
 Plain HTML/CSS/JS version of [yulissalu.com](https://yulissalu.com), moved over from Framer. There's no build step.
 
+The layout, spacing, fonts, colors, and breakpoints copy the Framer site exactly. They were checked element by element against the live site at desktop (1440px), tablet (800px), and phone (390px) widths.
+
 ## Preview locally
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Then open http://localhost:8000. (Opening `index.html` directly also works, but a local server behaves more like the real site.)
+Then open http://localhost:8000.
 
 ## Where things live
 
 | File | What it is |
 | --- | --- |
-| `index.html` | Homepage: hero, Glyph Clock, about, selected works, experiences |
+| `index.html` | Homepage: falling pills, giant name, Glyph Clock, about, selected works, playground link, experiences |
 | `time-based-media.html`, `tsa-design.html`, `interactive-visuals.html` | Project pages |
-| `playground.html` | Archived painting/drawing/ceramics, click to enlarge |
-| `css/style.css` | All styling. Colors and fonts are tokens at the top, with dark mode just below |
-| `js/main.js` | Theme toggle, footer clock, fade-ins, hover video, lightbox, falling pills |
+| `playground.html` | Archived painting, drawing, and ceramics work |
+| `css/style.css` | All styling. Colors are at the top (light, then dark). Each page's section is labeled. |
+| `js/main.js` | Theme toggle, footer clock, custom cursor, falling pills (Matter.js), and entrance/scroll animations |
 | `embeds/glyph-clock.html` | The p5.js Glyph Clock sketch, loaded in an iframe |
-| `assets/` | Images, the preview video, favicons |
+| `assets/` | Images, the preview video, and favicons |
 
-The header and footer are copied into each page. If you change one, change it on every page (or ask Claude to).
+## Things that work the same as on Framer
 
-## Adding a project
+- **Fonts:** Inter Tight for text, Space Grotesk for "YULISSA LU", and Space Mono for the pills.
+- **Grid:** a 6-column grid with 15px gaps. Pages are padded 64px on desktop, 32px on tablet, and 16px on phone.
+- **Breakpoints:** these differ per page, the same as in Framer. They're listed at the top of `css/style.css`.
+- **Text sizes** step down at the same widths Framer used, for example h3 is 20 → 15 → 14px.
+- **Animations:**
+  - The pills fall and can be dragged.
+  - The cursor ring follows the mouse.
+  - The project list fades in after 1.2s.
+  - Project titles slide up word by word.
+  - Playground images ease from 110% to 100% as you scroll.
 
-1. Copy one of the project pages, such as `tsa-design.html`, and rename it.
-2. Put images in `assets/images/`.
-3. Add a `.work-card` for it in the "Selected Works" section of `index.html`.
-4. Update the "NEXT PROJECT" links so the pages still loop.
+## Editing tips
+
+- The header and footer are copied into each page. If you change one, change it on every page.
+- **New project:** copy a project page, add its images to `assets/images/`, add a `.work-card` to the homepage, and update the "NEXT PROJECT" links so they still loop.
+- **New playground piece:** copy an `.archive-item` in `playground.html`. `data-offset` sets how far right it sits: `0`, `2`, or `3` columns.
 
 ## Deploying
 
