@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glyph Clock</title>
+</head>
+<body>
+<style>
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent;
+  }
+
+  #sketch-wrap, #sketch-holder {
+    width: 100%;
+    height: 100%;
+    overflow: hidden !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  canvas {
+    display: block !important;
+  }
+</style>
+
+<div id="sketch-wrap">
+  <div id="sketch-holder"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+<script>
+new p5((p) => {
+  const BASE_W = 700;
+  const BASE_H = 200;
+
+  let CURRENT_FONT;
+  let GLYPH_ASPECT_RATIO = 0.55;
+  let GLYPH_SPACING = 0.875;
+  let GLYPH_SLANT = 5;
+
+  function glow(glowColor, blurriness, scaleFactor = 1) {
+    p.drawingContext.shadowBlur = blurriness * scaleFactor;
+    p.drawingContext.shadowColor = glowColor;
+  }
+
+  function radialGradient(cx, cy, radius, innerCol, outerCol) {
+    p.push();
+    p.noStroke();
+    for (let r = radius; r > 0; r -= 4) {
+      const t = r / radius;
+      const col = p.lerpColor(outerCol, innerCol, t);
+      col.setAlpha(20 * Math.pow(t, 0.1));
+      p.fill(col);
+      p.ellipse(cx, cy, r * 2, r * 2);
+    }
+    p.pop();
+  }
+
+  function drawGlyph16Segments(ch, px, py, sc) {
+    let charCode = ch.charCodeAt(0) - 32;
+    if (charCode > 0 && charCode < CURRENT_FONT.length) {
+      let charData = CURRENT_FONT[charCode];
+      if (!charData) return;
+
+      const sx = sc * 0.5 * GLYPH_ASPECT_RATIO;
+      const sy = sc * 0.5;
+      const d = 0.25;
+      const e = d * GLYPH_ASPECT_RATIO;
+      const f = 0.7;
+
+      const drawCoords = [
+        [0 + d, 0, 1 - d * f, 0],
+        [1 + d * f, 0, 2 - d, 0],
+        [2, 0 + e, 2, 1 - e * f],
+        [2, 1 + e * f, 2, 2 - e],
+        [2 - d, 2, 1 + d * f, 2],
+        [1 - d * f, 2, 0 + d, 2],
+        [0, 2 - e, 0, 1 + e * f],
+        [0, 1 - e * f, 0, 0 + e],
+        [0 + d, 0 + e, 1 - d, 1 - e],
+        [1, 0 + e, 1, 1 - e],
+        [2 - d, 0 + e, 1 + d, 1 - e],
+        [2 - d, 1, 1 + d * f, 1],
+        [2 - d, 2 - e, 1 + d, 1 + e],
+        [1, 2 - e, 1, 1 + e],
+        [0 + d, 2 - e, 1 - d, 1 + e],
+        [0 + d, 1, 1 - d * f, 1],
+        [2.5, 2 - e, 2.5 - d, 2],
+      ];
+
+      p.push();
+      p.translate(px, py);
+      p.shearX(p.radians(0 - GLYPH_SLANT));
+      for (let i = 0; i < charData.length; i++) {
+        if (charData[i] === "1") {
+          let L = drawCoords[16 - i];
+          p.line(L[0] * sx, L[1] * sy, L[2] * sx, L[3] * sy);
+        }
+      }
+      p.pop();
+    }
+  }
+
+  function drawString(str, px, py, sc) {
+    for (let i = 0; i < str.length; i++) {
+      drawGlyph16Segments(str[i], px, py, sc);
+      px += sc * GLYPH_SPACING;
+    }
+  }
+
+  const SixteenSegmentASCII = [
+    "00000000000000000","10000000000001100","00000001000000100","01010101000111100",
+    "01010101010111011","01110111010011001","01001001101110001","00000001000000000",
+    "00001010000000000","00100000100000000","01111111100000000","01010101000000000",
+    "00100000000000000","01000100000000000","10000000000000000","00100010000000000",
+    "01010101000000000","01000100000000000","00000000000110011","01000100000110011",
+    "00000010111111111","11010101000111011","01101100100000000","01010011000011000",
+    "00101000000000000","11010101000101000","00010001000000000","00100001000000000",
+    "01001010000000000","01000100000110000","00100100100000000","10010100000000111",
+    "00000101011110111","01111111111111111","00010101000111111","00000000011110011",
+    "00010001000111111","01000000011110011","01000000011000011","00000100011111011",
+    "01000100011001100","00010001000110011","00000000001111100","01001010011000000",
+    "00000000011110000","00000010111001100","00001000111001100","00000000011111111",
+    "01000100011000111","00001000011111111","01001100011000111","01000100010111011",
+    "00010001000000011","00000000011111100","00100010011000000","00101000011000000",
+    "00101010100000000","00010010100000000","00100010000110011","00010001000010010",
+    "00001000100000000","00010001000100001","00101000000000000","00000000000110000",
+    "00000000100000000","01010000001110000","01010000011100000","01000000001110000",
+    "00010100000000000","01100000001100000","01010101000000010","01010001010100001",
+    "01010000011000000","00010000000000000","00010001001100000","00011011000000000",
+    "00000000011000000","01010100001001000","01010000001000000","01010000001100000",
+    "01000001011000001","01010001010000001","01000000001000000","01010000010100001",
+    "01000000011100000","00010000001100000","00100000001000000","00101000001001000",
+    "00101010100000000","00000101000011100","01100000000100000","01010001000010010",
+    "00010001000000000","00010101000100001","01100110000000000","00000000000000000"
+  ];
+
+  p.setup = () => {
+    const c = p.createCanvas(1, 1);
+    c.parent("sketch-holder");
+    p.textAlign(p.CENTER);
+    p.pixelDensity(1); // lock density for consistent colors
+    CURRENT_FONT = SixteenSegmentASCII;
+    resizeCanvasToHolder();
+
+    const target = document.getElementById("sketch-wrap") || document.getElementById("sketch-holder");
+    if (window.ResizeObserver && target) {
+      new ResizeObserver(() => resizeCanvasToHolder()).observe(target);
+    }
+    window.addEventListener("resize", resizeCanvasToHolder);
+    window.addEventListener("orientationchange", resizeCanvasToHolder);
+  };
+
+  function resizeCanvasToHolder() {
+    const holder = document.getElementById("sketch-wrap") || document.getElementById("sketch-holder");
+    if (!holder) return;
+    p.resizeCanvas(Math.max(1, holder.clientWidth), Math.max(1, holder.clientHeight));
+  }
+
+  p.draw = () => {
+    const { s, ox, oy } = (() => {
+      const s = Math.min(p.width / BASE_W, p.height / BASE_H);
+      const ox = (p.width - BASE_W * s) / 2;
+      const oy = (p.height - BASE_H * s) / 2;
+      return { s, ox, oy };
+    })();
+
+    p.background("#0D152F");
+
+    p.push();
+    p.translate(ox, oy);
+    p.scale(s);
+
+    const inner = p.color(255, 33, 0);
+    const outer = p.color(255, 220, 0);
+    radialGradient(BASE_W / 2, BASE_H / 2, Math.max(500, 80) * 0.6, inner, outer);
+
+    p.stroke(255);
+    p.strokeWeight(2);
+    p.strokeCap(p.ROUND);
+    p.noFill();
+
+    const hh = p.nf(p.hour(), 2);
+    const mm = p.nf(p.minute(), 2);
+    const ss = p.nf(p.second(), 2);
+    const sc = 60;
+    const str = `${hh} ${mm} ${ss}`;
+
+    glow(p.color(255), 18, s);
+
+    let px = BASE_W / 2 - (str.length * sc * GLYPH_SPACING) / 2;
+    const py = BASE_H / 2 - sc / 2;
+
+    for (let i = 0; i < str.length; i++) {
+      const ch = str[i];
+      if (ch === " ") { px += sc * GLYPH_SPACING; continue; }
+      drawString(ch, px, py, sc);
+      px += sc * GLYPH_SPACING;
+    }
+
+    p.pop();
+  };
+});
+</script>
+</body>
+</html>

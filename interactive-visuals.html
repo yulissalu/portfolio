@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Interactive Visuals · Yulissa Lu</title>
+  <meta name="description" content="Interactive visuals built with creative code: generative systems, interaction, and experimentation.">
+  <link rel="icon" href="assets/images/favicon-light.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="assets/images/favicon-dark.png" media="(prefers-color-scheme: dark)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+</head>
+<body>
+
+  <header class="site-header container">
+    <nav class="breadcrumb">
+      <a href="index.html"><h3>Home</h3></a><h3>/</h3>
+      <a href="index.html#works"><h3>Works</h3></a><h3>/</h3>
+      <span><h3>Interactive Visuals</h3></span>
+    </nav>
+    <button class="theme-toggle" aria-label="Light/Dark Toggle"></button>
+  </header>
+
+  <main class="container">
+    <h1 class="project-title">Interactive<br>Visuals</h1>
+
+    <div class="overview">
+      <span class="label">OVERVIEW</span>
+      <p>Interactive visuals built with creative code—projects from an intermediate studio focused on generative systems, interaction, and experimentation using tools like p5.js, TouchDesigner, and LLM-based workflows such as ComfyUI. Click/Hover over each work to interact!</p>
+    </div>
+
+    <figure class="cover fade-in" style="margin: 0">
+      <iframe src="https://yulissalu.github.io/interactive-lightning/" title="Interactive Lightning" loading="lazy"></iframe>
+    </figure>
+    <p class="caption">Interactive Lightning</p>
+
+    <div class="facts">
+      <div><span class="label">YEAR</span><p>2025</p></div>
+      <div><span class="label">ROLE</span><p>Artist</p></div>
+      <div><span class="label">SERVICES</span><p>Programming<br>Visual Design</p></div>
+    </div>
+
+    <section>
+      <div class="project-body">
+        <h2>About the project</h2>
+        <p>These projects use mathematics to explore patterns found in nature, creating visuals that feel dynamic and alive. The works range from abstract geometry and Hitomezashi sashiko–inspired stitching patterns to generative island maps that change with every click.</p>
+        <p><strong>Careful Square</strong> is a looping animation that uses easing functions and a double-exponential sigmoid to tell a narrative from simple shapes.</p>
+        <p><strong>Glyph Clock</strong>, featured on the homepage and one of my favorite pieces from this studio, reimagines time through a live display of Chinese characters built on a 16-segment digital clock system.</p>
+      </div>
+
+      <div class="gallery two-col">
+        <figure class="fade-in">
+          <iframe class="embed square" src="https://yulissalu.github.io/interactive-geo-composition/" title="Abstract Geometric Composition" loading="lazy"></iframe>
+          <figcaption><h3>Abstract Geometric Composition (Interactive)</h3></figcaption>
+        </figure>
+        <figure class="fade-in">
+          <iframe class="embed square" src="https://yulissalu.github.io/interactive-stitching/" title="Hitomezashi Sashiko Stitching" loading="lazy"></iframe>
+          <figcaption><h3>Hitomezashi Sashiko Stitching (Interactive)</h3></figcaption>
+        </figure>
+        <figure class="fade-in">
+          <iframe class="embed square" src="https://yulissalu.github.io/interactive-map/" title="Islands" loading="lazy"></iframe>
+          <figcaption><h3>Islands (Interactive)</h3></figcaption>
+        </figure>
+        <figure class="fade-in">
+          <img src="assets/images/careful-square.gif" alt="Careful Square animation" loading="lazy">
+          <figcaption><h3>Careful Square</h3></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <nav class="project-nav">
+      <a href="index.html"><h3>← BACK TO HOME</h3></a>
+      <a href="tsa-design.html"><h3>NEXT PROJECT →</h3></a>
+    </nav>
+  </main>
+
+  <!-- Footer: same block on every page -->
+  <footer class="site-footer">
+    <div class="container">
+      <h2 class="cta">LET'S GET IN TOUCH</h2>
+      <nav class="footer-links">
+        <a href="mailto:yulissawlu@gmail.com"><h3>Email</h3></a>
+        <a href="https://www.linkedin.com/in/yulissalu/" target="_blank" rel="noopener"><h3>LinkedIn</h3></a>
+        <a href="https://drive.google.com/file/d/1TYutL1owKwUc8M429dawIwB77IbBxhwb/view?usp=share_link" target="_blank" rel="noopener"><h3>Resume</h3></a>
+      </nav>
+      <div class="footer-bottom">
+        <p>© <span data-year></span> Yulissa Lu</p>
+        <p data-clock></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playground · Yulissa Lu</title>
+  <meta name="description" content="Archived painting, drawing, and ceramics works by Yulissa Lu.">
+  <link rel="icon" href="assets/images/favicon-light.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="assets/images/favicon-dark.png" media="(prefers-color-scheme: dark)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+</head>
+<body>
+
+  <header class="site-header container">
+    <a href="mailto:yulissawlu@gmail.com"><h3 class="muted">yulissawlu@gmail.com</h3></a>
+    <div class="site-nav">
+      <a href="index.html"><h3>← BACK TO HOME</h3></a>
+      <button class="theme-toggle" aria-label="Light/Dark Toggle"></button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="overview" style="margin: 40px 0 48px">
+      <h1 class="project-title" style="margin: 0 0 16px">Archived works</h1>
+      <p class="muted">Series of past traditional painting, drawing and ceramics works I've made over the years.</p>
+    </div>
+
+    <!-- Click an image to view it larger -->
+    <div class="archive-grid">
+      <figure><img src="assets/images/playground/abyss.jpg" alt="Abyss" loading="lazy"><figcaption>Abyss</figcaption></figure>
+      <figure><img src="assets/images/playground/a-safe-resting-place.png" alt="A Safe Resting Place" loading="lazy"><figcaption>A Safe Resting Place</figcaption></figure>
+      <figure><img src="assets/images/playground/fleeting-dream.jpg" alt="Fleeting Dream" loading="lazy"><figcaption>Fleeting Dream</figcaption></figure>
+      <figure><img src="assets/images/playground/look.jpg" alt="LOOK" loading="lazy"><figcaption>LOOK</figcaption></figure>
+      <figure><img src="assets/images/playground/the-grand-scheme.png" alt="The Grand Scheme" loading="lazy"><figcaption>The Grand Scheme</figcaption></figure>
+      <figure><img src="assets/images/playground/vacuum.png" alt="Vacuum" loading="lazy"><figcaption>Vacuum</figcaption></figure>
+      <figure><img src="assets/images/playground/immortality.jpg" alt="Immortality" loading="lazy"><figcaption>Immortality</figcaption></figure>
+      <figure><img src="assets/images/playground/abandoned.jpg" alt="Abandoned" loading="lazy"><figcaption>Abandoned</figcaption></figure>
+      <figure><img src="assets/images/playground/everyday-routine.png" alt="Everyday Routine" loading="lazy"><figcaption>Everyday Routine</figcaption></figure>
+      <figure><img src="assets/images/playground/cerberus.jpg" alt="Cerberus" loading="lazy"><figcaption>Cerberus</figcaption></figure>
+      <figure><img src="assets/images/playground/contemplation.jpg" alt="Contemplation" loading="lazy"><figcaption>Contemplation</figcaption></figure>
+      <figure><img src="assets/images/playground/unplanned-obsolescence.jpg" alt="Unplanned Obsolescence" loading="lazy"><figcaption>Unplanned Obsolescence</figcaption></figure>
+    </div>
+  </main>
+
+  <div class="lightbox" role="dialog" aria-label="Enlarged artwork"></div>
+
+  <!-- Footer: same block on every page -->
+  <footer class="site-footer">
+    <div class="container">
+      <h2 class="cta">LET'S GET IN TOUCH</h2>
+      <nav class="footer-links">
+        <a href="mailto:yulissawlu@gmail.com"><h3>Email</h3></a>
+        <a href="https://www.linkedin.com/in/yulissalu/" target="_blank" rel="noopener"><h3>LinkedIn</h3></a>
+        <a href="https://drive.google.com/file/d/1TYutL1owKwUc8M429dawIwB77IbBxhwb/view?usp=share_link" target="_blank" rel="noopener"><h3>Resume</h3></a>
+      </nav>
+      <div class="footer-bottom">
+        <p>© <span data-year></span> Yulissa Lu</p>
+        <p data-clock></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

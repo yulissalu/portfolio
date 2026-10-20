@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yulissa Lu Portfolio</title>
+  <meta name="description" content="Yulissa is a junior at Carnegie Mellon University studying Fine Art, Decision Science, and Human-Computer Interaction, interested in UX/UI and graphic design.">
+  <meta property="og:title" content="Yulissa Lu Portfolio">
+  <meta property="og:image" content="assets/images/og-image.png">
+  <link rel="icon" href="assets/images/favicon-light.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="assets/images/favicon-dark.png" media="(prefers-color-scheme: dark)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Space+Grotesk:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+</head>
+<body>
+
+  <header class="site-header container">
+    <h3 class="muted">Yulissa Lu</h3>
+    <div class="tagline">
+      <svg viewBox="0 0 15 14" aria-hidden="true"><path d="M1 1v7.5h13L9.5 4 14 8.5 9.5 13" fill="none" stroke="var(--icon)" stroke-linejoin="bevel"/></svg>
+      <h3>MULTIDISCIPLINARY DESIGNER<br>BASED SEATTLE, WA &amp; PITTSBURGH, PA</h3>
+    </div>
+    <button class="theme-toggle" aria-label="Light/Dark Toggle"></button>
+  </header>
+
+  <!-- Hero: pills fall in and can be dragged around -->
+  <section class="hero">
+    <div class="physics" aria-hidden="true">
+      <div class="pill square">BHA</div>
+      <div class="pill dot">
+        <svg viewBox="0 0 46 44"><path d="M23.169 29.748 13.398 43.891l-6.515-4.255 10.221-14.603L.481 19.629l2.471-7.015 16.173 5.29V.081h7.863v17.823l16.286-5.29 2.359 7.13-16.51 5.289 10.332 14.489-6.402 4.254z"/></svg>
+      </div>
+      <div class="pill">UX/UI DESIGNER</div>
+      <div class="pill">VISUAL ARTIST</div>
+      <div class="pill dot">
+        <svg viewBox="0 0 37 49"><path d="M32.138 35.695 28.652 32.221 38.567 22.343 40.892 20.777 40.618 19.959 37.815 20.3H0v-4.973h37.815l2.803.409.274-.818-2.325-1.566-9.915-9.878L32.138 0l16.139 16.077v3.542z" transform="translate(-5.644 6.536) rotate(90 24.25 17.75)"/></svg>
+      </div>
+      <div class="pill square">HCI</div>
+    </div>
+    <h1 class="giant-name">YULISSA LU</h1>
+  </section>
+
+  <!-- Glyph Clock (p5.js sketch lives in embeds/glyph-clock.html) -->
+  <section class="container fade-in" style="padding-top: 0">
+    <iframe class="clock-frame" src="embeds/glyph-clock.html" title="Glyph Clock" loading="lazy"></iframe>
+    <p class="caption">Glyph Clock, 2025</p>
+  </section>
+
+  <section class="container fade-in">
+    <div class="about">
+      <h2>Hi, I'm Yulissa, a junior at Carnegie Mellon University.</h2>
+      <p>Major in Fine Art, Decision Science, and Human-Computer Interaction. Interested in UX/UI and graphic design, with skills in designing human-centered experiences and expressive visuals, supported by expertise in UI/UX prototyping, digital illustration, 3D environments, and programming.</p>
+    </div>
+  </section>
+
+  <section class="container" id="works">
+    <div class="section-head">
+      <h2>Selected Works</h2>
+      <h3 class="muted">2025 - 2026</h3>
+    </div>
+
+    <div class="works">
+      <a class="work-card fade-in" href="time-based-media.html">
+        <div class="media">
+          <img src="assets/images/time-based-media-cover.png" alt="Time-Based Media cover">
+          <video src="assets/video/time-based-media-preview.mp4" muted loop playsinline preload="none"></video>
+        </div>
+        <div class="meta">
+          <h3>Time-Based Media</h3>
+          <h3>Animation</h3>
+          <h3>2025-26</h3>
+        </div>
+      </a>
+
+      <a class="work-card fade-in" href="tsa-design.html">
+        <div class="media">
+          <img src="assets/images/tsa-banner.png" alt="TSA Eclipse banner">
+        </div>
+        <div class="meta">
+          <h3>TSA Design</h3>
+          <h3>Graphic Design</h3>
+          <h3>2025</h3>
+        </div>
+      </a>
+
+      <a class="work-card fade-in" href="interactive-visuals.html">
+        <div class="media">
+          <img src="assets/images/interactive-visuals-cover.png" alt="Interactive Visuals cover">
+        </div>
+        <div class="meta">
+          <h3>Interactive Visuals</h3>
+          <h3>Creative Coding</h3>
+          <h3>2025</h3>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="container fade-in">
+    <div class="playground-teaser">
+      <h2>
+        <a class="arrow-link" href="playground.html">
+          See playground
+          <svg viewBox="0 0 21 20" aria-hidden="true"><path d="M0 0v7.5h13L8.5 3 13 7.5 8.5 12" transform="translate(4 4) rotate(-45 6.5 6)" fill="none" stroke="var(--icon)" stroke-linejoin="bevel"/></svg>
+        </a>
+      </h2>
+      <p>Interdisciplinary creative technologist integrating design, fine art, psychology, and AI, with experience in Adobe Creative Suite, Figma, Blender, TouchDesigner, JavaScript, Python, and generative tools such as ComfyUI to build interactive and research-informed digital work.</p>
+    </div>
+  </section>
+
+  <section class="container experience fade-in">
+    <h2>Experiences</h2>
+    <div class="exp-row">
+      <h3 class="year">2026</h3>
+      <div><p class="role">Content Marketing Intern</p><p class="org">Loova AI</p></div>
+    </div>
+    <div class="exp-row">
+      <h3 class="year">2025</h3>
+      <div><p class="role">AI Research &amp; Design Intern</p><p class="org">Microsoft</p></div>
+    </div>
+    <div class="exp-row">
+      <h3 class="year">2025</h3>
+      <div><p class="role">Teaching Assistant</p><p class="org">Carnegie Mellon University</p></div>
+    </div>
+    <div class="exp-row">
+      <h3 class="year">2025</h3>
+      <div><p class="role">Social Media Specialist</p><p class="org">American Marketing Association</p></div>
+    </div>
+  </section>
+
+  <!-- Footer: same block on every page -->
+  <footer class="site-footer">
+    <div class="container">
+      <h2 class="cta">LET'S GET IN TOUCH</h2>
+      <nav class="footer-links">
+        <a href="mailto:yulissawlu@gmail.com"><h3>Email</h3></a>
+        <a href="https://www.linkedin.com/in/yulissalu/" target="_blank" rel="noopener"><h3>LinkedIn</h3></a>
+        <a href="https://drive.google.com/file/d/1TYutL1owKwUc8M429dawIwB77IbBxhwb/view?usp=share_link" target="_blank" rel="noopener"><h3>Resume</h3></a>
+      </nav>
+      <div class="footer-bottom">
+        <p>© <span data-year></span> Yulissa Lu</p>
+        <p data-clock></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
