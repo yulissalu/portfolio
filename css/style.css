@@ -328,8 +328,17 @@ html.lenis, html.lenis body { height: auto; }
   margin: 0;
 }
 .work-card .cover img { width: 100%; height: 100%; object-fit: cover; }
-/* On hover the cover image hides to show the preview video behind it */
-.work-card.has-video:hover .cover { display: none; }
+/* Hovering plays the preview video; the cover hides only once it's actually
+   playing, so there's never a blank frame (see js/main.js) */
+.work-card.has-video.is-playing .cover { display: none; }
+/* No native play button or controls on the preview, in any browser */
+.work-card .media video { pointer-events: none; }
+.work-card .media video::-webkit-media-controls,
+.work-card .media video::-webkit-media-controls-start-playback-button,
+.work-card .media video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
 
 .work-card .caption {
   display: flex;
@@ -409,7 +418,7 @@ html.lenis, html.lenis body { height: auto; }
   .works-header { padding: 0 15px; }
   .works-list { padding: 0 16px; }
   .work-card .cover { inset: 0; }
-  .work-card.has-video:hover .cover { display: block; }
+  .work-card.has-video.is-playing .cover { display: block; }
   .home-playground { gap: 19px; padding: 30px 16px; }
   .home-playground .pg-heading { grid-column: 1 / -1; }
   .home-playground .pg-icon { display: none; }

@@ -332,6 +332,30 @@ if (window.Matter) {
 const worksList = document.querySelector(".works-list");
 if (worksList) setTimeout(() => worksList.classList.add("is-visible"), 1200);
 
+// ---------- Selected works: preview video plays on hover ----------
+// The cover image stays up until the video is actually playing, then hides;
+// leaving the card pauses and rewinds. Touch screens just show the cover.
+if (matchMedia("(hover: hover)").matches) {
+  document.querySelectorAll(".work-card.has-video").forEach((card) => {
+    const video = card.querySelector("video");
+    if (!video) return;
+    video.preload = "auto"; // load in the background so hover starts instantly
+    let hovering = false;
+    video.addEventListener("playing", () => { if (hovering) card.classList.add("is-playing"); });
+    card.addEventListener("mouseenter", () => {
+      hovering = true;
+      const p = video.play();
+      if (p) p.catch(() => {}); // if a browser refuses, the cover just stays
+    });
+    card.addEventListener("mouseleave", () => {
+      hovering = false;
+      card.classList.remove("is-playing");
+      video.pause();
+      video.currentTime = 0;
+    });
+  });
+}
+
 // ---------- Project page entrance animations ----------
 // Title words slide up, "OVERVIEW" letters rise in, the paragraph floats up.
 function animate(el, keyframes, options) {
