@@ -346,30 +346,6 @@ html.lenis, html.lenis body { height: auto; }
 /* No native play button or controls on the preview, in any browser */
 .work-card .media video { pointer-events: none; }
 
-/* Thin progress line along the bottom of a hovered video card. It appears
-   on hover (so loading is visible too) and fills as the video plays. */
-.video-progress {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 14px;
-  height: 2px;
-  border-radius: 1px;
-  background: rgba(255, 255, 255, 0.28);
-  mix-blend-mode: difference; /* like the cursor ring: dark on light video, light on dark */
-  overflow: hidden;
-  opacity: 0;
-  transition: opacity 0.25s ease;
-  pointer-events: none;
-}
-.video-progress > span {
-  display: block;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.92);
-  transform: scaleX(0);
-  transform-origin: left center;
-}
-.work-card.has-video:hover .video-progress { opacity: 1; }
 .work-card .media video::-webkit-media-controls,
 .work-card .media video::-webkit-media-controls-start-playback-button,
 .work-card .media video::-webkit-media-controls-overlay-play-button {
