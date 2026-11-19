@@ -337,7 +337,9 @@ html.lenis, html.lenis body { height: auto; }
 @media (hover: hover) {
   .work-card:not(.has-video):hover .cover { transform: scale(0.8305); }
 }
-.work-card .cover img { width: 100%; height: 100%; object-fit: cover; }
+/* Round the image itself too: Safari doesn't clip a child to its parent's
+   rounded corners while the parent is transformed. */
+.work-card .cover img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 /* Hovering plays the preview video; the cover hides only once it's actually
    playing, so there's never a blank frame (see js/main.js) */
 .work-card.has-video.is-playing .cover { display: none; }
