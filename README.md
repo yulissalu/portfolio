@@ -47,6 +47,10 @@ The defaults are the values read from the live Framer site.
 - **Cursor** (`MOTION.cursor`): a spring, in the same units as Framer's spring transition. Raise `stiffness` or lower `mass` to make the ring catch up faster; raise `damping` to remove any overshoot. `offsetX`/`offsetY` place the ring relative to the pointer. The normal pointer stays visible, as on Framer. The ring only appears at 1200px and wider (`minWidth`), and Playground has none.
 - **Pills** (`MOTION.physics`): `gravityY` sets fall speed, `frictionAir` slows falling and drifting, `restitution` adds bounce (0 = none), `friction` controls sliding, and `dragAngularStiffness` controls whether a dragged pill swings (0) or stays upright (1).
 
+## Cache-busting
+
+Every page loads `css/style.css?v=…` and `js/main.js?v=…`. After changing either file, bump the `v=` value in all five `.html` pages so visitors get the new version instead of a cached copy (GitHub Pages lets browsers cache files for 10 minutes).
+
 ## Editing tips
 
 - The header and footer are copied into each page. If you change one, change it on every page.
