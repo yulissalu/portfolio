@@ -325,7 +325,13 @@ html.lenis, html.lenis body { height: auto; }
   margin: 0;
 }
 .work-card .media video { width: calc(100% + 20px); height: auto; object-fit: cover; }
-.work-card .cover { transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1); }
+.work-card .cover {
+  transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+  /* Its own rounding, so the image keeps 5px corners once scaled down
+     (5px / 0.8305). At rest these corners sit outside the clipped area. */
+  border-radius: calc(5px / 0.8305);
+  overflow: hidden;
+}
 /* Image-only cards: on hover the image eases down to the inset size
    (578 x 329 of the 696 x 396 cover at desktop, as on the Framer site). */
 @media (hover: hover) {
