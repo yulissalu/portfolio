@@ -331,6 +331,9 @@ html.lenis, html.lenis body { height: auto; }
      (5px / 0.8305). At rest these corners sit outside the clipped area. */
   border-radius: calc(5px / 0.8305);
   overflow: hidden;
+  /* Safari skips border-radius on a scaled image it draws directly;
+     a rounded clip-path holds in every browser. */
+  clip-path: inset(0 round calc(5px / 0.8305));
 }
 /* Image-only cards: on hover the image eases down to the inset size
    (578 x 329 of the 696 x 396 cover at desktop, as on the Framer site). */
@@ -342,10 +345,13 @@ html.lenis, html.lenis body { height: auto; }
 .work-card .cover img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 /* Hovering plays the preview video; the cover hides only once it's actually
    playing, so there's never a blank frame (see js/main.js) */
-.work-card.has-video.is-playing .cover { display: none; }
-/* No native play button or controls on the preview, in any browser */
+.work-card.has-video.is-playing .cover { opacity: 0; }
+/* The card itself is always what's under the pointer. If the cover image
+   were hit-testable, hiding it would make Safari report a mouse-leave and
+   stop the video a moment after it starts. */
+.work-card .cover,
 .work-card .media video { pointer-events: none; }
-
+/* No native play button or controls on the preview, in any browser */
 .work-card .media video::-webkit-media-controls,
 .work-card .media video::-webkit-media-controls-start-playback-button,
 .work-card .media video::-webkit-media-controls-overlay-play-button {
@@ -431,7 +437,7 @@ html.lenis, html.lenis body { height: auto; }
   .works-header { padding: 0 15px; }
   .works-list { padding: 0 16px; }
   .work-card .cover, .work-card .media video { inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
-  .work-card.has-video.is-playing .cover { display: block; }
+  .work-card.has-video.is-playing .cover { opacity: 1; }
   .home-playground { gap: 19px; padding: 30px 16px; }
   .home-playground .pg-heading { grid-column: 1 / -1; }
   .home-playground .pg-icon { display: none; }
