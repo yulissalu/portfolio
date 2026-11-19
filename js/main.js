@@ -43,21 +43,30 @@ if (cursor && desktopCursor.matches) {
       document.documentElement.classList.add("cursor-none");
     }
   });
-  document.addEventListener("mouseleave", () => {
+  const hideRing = () => {
     cursor.style.opacity = 0; shown = false;
     document.documentElement.classList.remove("cursor-none");
-  });
+  };
+  document.addEventListener("mouseleave", hideRing);
+  // The page stops getting mousemove inside an iframe (Glyph Clock, the
+  // interactive embeds), so hide the ring there instead of leaving it frozen.
+  document.querySelectorAll("iframe").forEach((f) => f.addEventListener("mouseenter", hideRing));
   let last = performance.now();
   (function loop(now) {
     const dt = Math.min((now - last) / 1000, 1 / 30);
     last = now;
+    // Implicit (backward) Euler: stable at any frame rate. The old explicit
+    // step blew up whenever a sub-step exceeded 2*mass/damping (~4ms), i.e.
+    // on 60Hz screens or after a dropped frame, flinging the ring off-screen.
+    const k = stiffness / mass, c = damping / mass;
     for (let i = 0; i < 4; i++) {
-      const h = dt / 4;
-      vx += ((stiffness * (tx - x) - damping * vx) / mass) * h;
-      vy += ((stiffness * (ty - y) - damping * vy) / mass) * h;
+      const h = dt / 4, denom = 1 + h * c + h * h * k;
+      vx = (vx + h * k * (tx - x)) / denom;
+      vy = (vy + h * k * (ty - y)) / denom;
       x += vx * h;
       y += vy * h;
     }
+    if (!Number.isFinite(x) || !Number.isFinite(y)) { x = tx; y = ty; vx = vy = 0; }
     cursor.style.transform = `translate(${x}px, ${y}px)`;
     requestAnimationFrame(loop);
   })(last);
