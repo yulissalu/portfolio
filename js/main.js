@@ -334,24 +334,57 @@ if (worksList) setTimeout(() => worksList.classList.add("is-visible"), 1200);
 
 // ---------- Selected works: preview video plays on hover ----------
 // The cover image stays up until the video is actually playing, then hides;
-// leaving the card pauses and rewinds. Touch screens just show the cover.
+// leaving the card pauses and rewinds. A thin progress line shows on hover
+// and fills as the video plays. Touch screens just show the cover.
 if (matchMedia("(hover: hover)").matches) {
   document.querySelectorAll(".work-card.has-video").forEach((card) => {
     const video = card.querySelector("video");
     if (!video) return;
-    video.preload = "auto"; // load in the background so hover starts instantly
-    let hovering = false;
+    let hovering = false, primed = false, raf = 0;
+
+    const bar = document.createElement("span");
+    bar.className = "video-progress";
+    bar.setAttribute("aria-hidden", "true");
+    bar.innerHTML = "<span></span>";
+    card.querySelector(".media").appendChild(bar);
+    const fill = bar.firstChild;
+    const drawProgress = () => {
+      const p = video.duration ? video.currentTime / video.duration : 0;
+      fill.style.transform = `scaleX(${p})`;
+      if (hovering) raf = requestAnimationFrame(drawProgress);
+    };
+
+    // Start buffering before the visitor reaches the card. Safari mostly
+    // ignores preload="auto", so it also gets a muted play/pause, which makes
+    // it download the opening seconds the way Chrome already does.
+    const prime = () => {
+      if (primed) return;
+      primed = true;
+      video.preload = "auto";
+      video.load();
+      const p = video.play();
+      if (p) p.then(() => { if (!hovering) { video.pause(); video.currentTime = 0; } }).catch(() => {});
+    };
+    new IntersectionObserver((entries, io) => {
+      if (entries[0].isIntersecting) { prime(); io.disconnect(); }
+    }, { rootMargin: "600px 0px" }).observe(card);
+
     video.addEventListener("playing", () => { if (hovering) card.classList.add("is-playing"); });
     card.addEventListener("mouseenter", () => {
       hovering = true;
+      prime();
       const p = video.play();
       if (p) p.catch(() => {}); // if a browser refuses, the cover just stays
+      cancelAnimationFrame(raf);
+      drawProgress();
     });
     card.addEventListener("mouseleave", () => {
       hovering = false;
+      cancelAnimationFrame(raf);
       card.classList.remove("is-playing");
       video.pause();
       video.currentTime = 0;
+      fill.style.transform = "scaleX(0)";
     });
   });
 }
