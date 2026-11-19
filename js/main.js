@@ -356,6 +356,17 @@ if (matchMedia("(hover: hover)").matches) {
       if (entries[0].isIntersecting) { prime(); io.disconnect(); }
     }, { rootMargin: "600px 0px" }).observe(card);
 
+    // Safari in Low Power Mode only lets a video start after a click or key
+    // press. A play() made during the visitor's first click/key anywhere on
+    // the page unlocks this video, so every hover after that plays it.
+    const unlock = () => {
+      ["pointerdown", "keydown"].forEach((t) => document.removeEventListener(t, unlock, true));
+      if (hovering || !video.paused) return;
+      const p = video.play();
+      if (p) p.then(() => { if (!hovering) { video.pause(); video.currentTime = 0; } }).catch(() => {});
+    };
+    ["pointerdown", "keydown"].forEach((t) => document.addEventListener(t, unlock, true));
+
     video.addEventListener("playing", () => { if (hovering) card.classList.add("is-playing"); });
     card.addEventListener("mouseenter", () => {
       hovering = true;
