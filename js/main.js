@@ -7,21 +7,26 @@
 // Change values here; the code below only reads them.
 // ============================================================================
 const MOTION = {
-  // Smooth scrolling (Lenis). Applies to mouse wheel and trackpad only;
-  // touch scrolling stays native. Turned off for prefers-reduced-motion.
+  // Smooth scrolling — Lenis 1.0.29, the exact version and settings the
+  // Framer site runs (read from window.lenis.options on yulissalu.com).
+  // Every wheel/trackpad input restarts a `duration`-second glide toward the
+  // new target along `easing`. Turned off for prefers-reduced-motion.
   scroll: {
-    // Share of the remaining distance covered per 60fps frame (0–1).
-    // Lower = more glide and lag, higher = snappier. Frame-rate independent.
-    // 0.1 is Lenis's default and what Framer's Smooth Scroll uses at its
-    // default intensity.
-    lerp: 0.1,
-    wheelMultiplier: 1,   // scales distance per wheel tick / trackpad delta
-    touchMultiplier: 1,   // only used if smoothTouch is true
-    smoothTouch: false,   // keep native momentum on phones and tablets
+    duration: 1.2,                                      // seconds per glide; longer = floatier
+    easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)), // exponential ease-out
+    wheelMultiplier: 1,      // distance per wheel tick / trackpad delta
+    normalizeWheel: true,    // clamp each wheel event to ±100px (evens out mice vs trackpads)
+    // Framer also smooths touch (smoothTouch: true, touchMultiplier: 2), which
+    // replaces the phone's native momentum. Off here so phones feel native;
+    // set both to the Framer values to match it exactly.
+    smoothTouch: false,
+    touchMultiplier: 2,
   },
 
-  // Custom cursor ring: a spring follows the pointer. Same units as Framer's
-  // spring transition (stiffness, damping, mass).
+  // Custom cursor ring — Framer cursor "mk8mvh" on yulissalu.com:
+  // spring { stiffness: 808, damping: 100, mass: 0.2 }, placement right,
+  // alignment center, offset (20, 20). The normal pointer stays visible; the
+  // ring trails beside it. Desktop breakpoint only, and not on Playground.
   cursor: {
     stiffness: 808,
     damping: 100,
@@ -29,9 +34,11 @@ const MOTION = {
     size: 28,        // ring diameter in px (keep in sync with .cursor in CSS)
     offsetX: 20,     // ring's left edge sits this far right of the pointer
     offsetY: 20,     // ring's center sits this far below the pointer
+    minWidth: 1200,  // Framer's Desktop breakpoint; no ring on Tablet/Phone
   },
 
-  // Falling pills in the homepage hero (Matter.js).
+  // Falling pills in the homepage hero — Matter.js settings read from the
+  // Framer Physics component instances on yulissalu.com.
   physics: {
     gravityY: 0.3,         // Matter gravity scale; 1 = Matter's default
     density: 0.001,
@@ -41,7 +48,10 @@ const MOTION = {
     wallFriction: 2,
     dragStiffness: 1,      // 1 = a dragged pill sticks to the pointer
     dragAngularStiffness: 0, // 0 = a dragged pill swings freely around the grab point
-    stepMs: 1000 / 60,     // fixed physics step, so speed is the same on 60/120Hz screens
+    // Framer calls Engine.update() once per animation frame, so its pills fall
+    // twice as fast on a 120Hz screen as on a 60Hz one. Here the step is tied
+    // to real time instead, matching the Framer site as seen on a 60Hz screen.
+    stepMs: 1000 / 60,
     maxStepsPerFrame: 4,   // catch-up limit after a dropped frame
     spawnTries: 40,        // attempts to find a non-overlapping start spot per pill
   },
@@ -52,14 +62,32 @@ const desktopCursor = matchMedia("(hover: hover) and (pointer: fine)");
 
 // ---------- Smooth scrolling ----------
 let lenis = null;
-if (window.Lenis && !reducedMotion.matches) {
-  lenis = new Lenis({
-    lerp: MOTION.scroll.lerp,
-    wheelMultiplier: MOTION.scroll.wheelMultiplier,
-    touchMultiplier: MOTION.scroll.touchMultiplier,
-    syncTouch: MOTION.scroll.smoothTouch,
-    anchors: true,      // same-page #links glide instead of jumping
-    autoRaf: true,
+const LenisCtor = window.Lenis || window.lenis; // the 1.0.29 build exposes `lenis`
+if (typeof LenisCtor === "function" && !reducedMotion.matches) {
+  const S = MOTION.scroll;
+  lenis = new LenisCtor({
+    duration: S.duration,
+    easing: S.easing,
+    orientation: "vertical",
+    gestureOrientation: "vertical",
+    smoothWheel: true,
+    smoothTouch: S.smoothTouch,
+    wheelMultiplier: S.wheelMultiplier,
+    touchMultiplier: S.touchMultiplier,
+    normalizeWheel: S.normalizeWheel,
+  });
+  const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+  requestAnimationFrame(raf);
+
+  // Same-page #links glide with the same easing instead of jumping.
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a || a.getAttribute("href").length < 2) return;
+    const target = document.getElementById(decodeURIComponent(a.getAttribute("href").slice(1)));
+    if (!target) return;
+    e.preventDefault();
+    lenis.scrollTo(target);
+    history.pushState(null, "", a.getAttribute("href"));
   });
 }
 
@@ -134,21 +162,21 @@ if (cursor && desktopCursor.matches) {
     running = true; last = performance.now(); requestAnimationFrame(loop);
   };
 
+  const hideRing = () => { cursor.style.opacity = 0; shown = false; };
+  const desktopWidth = matchMedia(`(min-width: ${C.minWidth}px)`);
+  desktopWidth.addEventListener("change", () => { if (!desktopWidth.matches) hideRing(); });
+
   addEventListener("mousemove", (e) => {
+    if (!desktopWidth.matches) return;
     tx = e.clientX + C.offsetX;
     ty = e.clientY - C.size / 2 + C.offsetY;
     if (!shown) {
       x = tx; y = ty; vx = vy = 0; shown = true; render();
       cursor.style.opacity = 1;
-      document.documentElement.classList.add("cursor-none");
     }
     wake();
   }, { passive: true });
 
-  const hideRing = () => {
-    cursor.style.opacity = 0; shown = false;
-    document.documentElement.classList.remove("cursor-none");
-  };
   document.addEventListener("mouseleave", hideRing);
   // The page stops getting mousemove inside an iframe (Glyph Clock, the
   // interactive embeds), so hide the ring there instead of leaving it frozen.
@@ -192,8 +220,11 @@ function startPhysics(stage, { sleeping }) {
   sizes.forEach(({ w, h }) => {
     let x, y;
     for (let t = 0; t < P.spawnTries; t++) {
-      x = w / 2 + Math.random() * Math.max(0, W - w);
-      y = h / 2 + Math.random() * Math.max(0, H - h);
+      // Framer's component uses random * (stage - pill) as the pill's center,
+      // which leans the layout up and to the left. Keep that lean, but clamp
+      // so a pill never starts half inside a wall.
+      x = Math.min(Math.max(Math.floor(Math.random() * (W - w)), w / 2), W - w / 2);
+      y = Math.min(Math.max(Math.floor(Math.random() * (H - h)), h / 2), H - h / 2);
       const box = { min: { x: x - w / 2, y: y - h / 2 }, max: { x: x + w / 2, y: y + h / 2 } };
       if (!bodies.some((b) => Bounds.overlaps(b.bounds, box))) break;
     }

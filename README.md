@@ -41,8 +41,10 @@ Then open http://localhost:8000.
 
 Every scroll, cursor, and physics number lives in the `MOTION` object at the top of `js/main.js`.
 
-- **Scroll** (`MOTION.scroll`): `lerp` is the main dial. Lower (e.g. `0.07`) glides longer and lags more; higher (e.g. `0.15`) feels snappier. `wheelMultiplier` changes how far each wheel tick goes. Smooth scroll uses [Lenis](https://github.com/darkroomengineering/lenis) (`js/vendor/lenis.min.js`), applies to wheel and trackpad only, and turns off for reduced motion.
-- **Cursor** (`MOTION.cursor`): a spring, in the same units as Framer's spring transition. Raise `stiffness` or lower `mass` to make the ring catch up faster; raise `damping` to remove any overshoot. `offsetX`/`offsetY` place the ring relative to the pointer.
+The defaults are the values read from the live Framer site.
+
+- **Scroll** (`MOTION.scroll`): uses [Lenis](https://github.com/darkroomengineering/lenis) 1.0.29 (`js/vendor/lenis-1.0.29.min.js`), the same version and settings as the Framer site. `duration` is the main dial: each wheel or trackpad input glides for that many seconds, so lower (e.g. `0.9`) feels snappier and higher (e.g. `1.5`) floatier. `wheelMultiplier` changes how far each tick goes. Touch scrolling stays native unless you set `smoothTouch: true` (Framer's setting). Smooth scroll turns off for reduced motion.
+- **Cursor** (`MOTION.cursor`): a spring, in the same units as Framer's spring transition. Raise `stiffness` or lower `mass` to make the ring catch up faster; raise `damping` to remove any overshoot. `offsetX`/`offsetY` place the ring relative to the pointer. The normal pointer stays visible, as on Framer. The ring only appears at 1200px and wider (`minWidth`), and Playground has none.
 - **Pills** (`MOTION.physics`): `gravityY` sets fall speed, `frictionAir` slows falling and drifting, `restitution` adds bounce (0 = none), `friction` controls sliding, and `dragAngularStiffness` controls whether a dragged pill swings (0) or stays upright (1).
 
 ## Editing tips
