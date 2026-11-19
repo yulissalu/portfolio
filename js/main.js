@@ -1,8 +1,67 @@
 // Shared behavior for every page. Each piece mirrors a component from the
-// original Framer site: theme toggle, live clock, custom cursor, falling
-// pills (Matter.js), and the entrance/scroll animations.
+// original Framer site: smooth scroll, theme toggle, live clock, custom
+// cursor, falling pills (Matter.js), and the entrance/scroll animations.
 
+// ============================================================================
+// MOTION SETTINGS — every tunable number for scroll, cursor and physics.
+// Change values here; the code below only reads them.
+// ============================================================================
+const MOTION = {
+  // Smooth scrolling (Lenis). Applies to mouse wheel and trackpad only;
+  // touch scrolling stays native. Turned off for prefers-reduced-motion.
+  scroll: {
+    // Share of the remaining distance covered per 60fps frame (0–1).
+    // Lower = more glide and lag, higher = snappier. Frame-rate independent.
+    // 0.1 is Lenis's default and what Framer's Smooth Scroll uses at its
+    // default intensity.
+    lerp: 0.1,
+    wheelMultiplier: 1,   // scales distance per wheel tick / trackpad delta
+    touchMultiplier: 1,   // only used if smoothTouch is true
+    smoothTouch: false,   // keep native momentum on phones and tablets
+  },
+
+  // Custom cursor ring: a spring follows the pointer. Same units as Framer's
+  // spring transition (stiffness, damping, mass).
+  cursor: {
+    stiffness: 808,
+    damping: 100,
+    mass: 0.2,
+    size: 28,        // ring diameter in px (keep in sync with .cursor in CSS)
+    offsetX: 20,     // ring's left edge sits this far right of the pointer
+    offsetY: 20,     // ring's center sits this far below the pointer
+  },
+
+  // Falling pills in the homepage hero (Matter.js).
+  physics: {
+    gravityY: 0.3,         // Matter gravity scale; 1 = Matter's default
+    density: 0.001,
+    friction: 0.05,        // pill-on-pill and pill-on-wall sliding friction
+    frictionAir: 0.01,     // air drag; higher = slower fall, faster settle
+    restitution: 0,        // bounciness; 0 = no bounce (Matter default)
+    wallFriction: 2,
+    dragStiffness: 1,      // 1 = a dragged pill sticks to the pointer
+    dragAngularStiffness: 0, // 0 = a dragged pill swings freely around the grab point
+    stepMs: 1000 / 60,     // fixed physics step, so speed is the same on 60/120Hz screens
+    maxStepsPerFrame: 4,   // catch-up limit after a dropped frame
+    spawnTries: 40,        // attempts to find a non-overlapping start spot per pill
+  },
+};
+
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const desktopCursor = matchMedia("(hover: hover) and (pointer: fine)");
+
+// ---------- Smooth scrolling ----------
+let lenis = null;
+if (window.Lenis && !reducedMotion.matches) {
+  lenis = new Lenis({
+    lerp: MOTION.scroll.lerp,
+    wheelMultiplier: MOTION.scroll.wheelMultiplier,
+    touchMultiplier: MOTION.scroll.touchMultiplier,
+    syncTouch: MOTION.scroll.smoothTouch,
+    anchors: true,      // same-page #links glide instead of jumping
+    autoRaf: true,
+  });
+}
 
 // ---------- Light/dark toggle ----------
 // The saved choice is applied early by the inline script in each page's <head>.
@@ -29,20 +88,63 @@ function tick() {
 if (clocks.length) { tick(); setInterval(tick, 1000); }
 
 // ---------- Custom cursor ----------
-// 28px ring that trails the pointer on a spring, 20px right of it.
+// Exact solution of a damped spring (the same model as Framer's spring
+// transition), advanced by the real frame time. Because it's exact rather
+// than stepped, it can't blow up at any frame rate.
+function springStep(d, v, dt, k, c, m) {
+  // d = position minus target, v = velocity. Returns [d, v] after dt seconds.
+  const a = c / m, w2 = k / m, disc = a * a - 4 * w2;
+  if (disc > 1e-6) {                       // overdamped (the cursor's case)
+    const s = Math.sqrt(disc), r1 = (-a + s) / 2, r2 = (-a - s) / 2;
+    const A = (v - r2 * d) / (r1 - r2), B = d - A;
+    const e1 = Math.exp(r1 * dt), e2 = Math.exp(r2 * dt);
+    return [A * e1 + B * e2, A * r1 * e1 + B * r2 * e2];
+  }
+  if (disc < -1e-6) {                      // underdamped (bouncy)
+    const wd = Math.sqrt(-disc) / 2, h = -a / 2, e = Math.exp(h * dt);
+    const C2 = (v - h * d) / wd, cos = Math.cos(wd * dt), sin = Math.sin(wd * dt);
+    return [e * (d * cos + C2 * sin), e * ((h * d + wd * C2) * cos + (h * C2 - wd * d) * sin)];
+  }
+  const r = -a / 2, C2 = v - r * d, e = Math.exp(r * dt); // critically damped
+  return [e * (d + C2 * dt), e * (r * (d + C2 * dt) + C2)];
+}
+
 const cursor = document.querySelector(".cursor");
 if (cursor && desktopCursor.matches) {
-  let tx = 0, ty = 0, x = 0, y = 0, vx = 0, vy = 0, shown = false;
-  const stiffness = 808, damping = 100, mass = 0.2;
+  const C = MOTION.cursor;
+  // Pointer target (where the ring wants to be) vs. rendered ring position.
+  let tx = 0, ty = 0, x = 0, y = 0, vx = 0, vy = 0;
+  let shown = false, running = false, last = 0;
+
+  const render = () => (cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`);
+  const loop = (now) => {
+    const dt = Math.min((now - last) / 1000, 0.1);
+    last = now;
+    [x, vx] = springStep(x - tx, vx, dt, C.stiffness, C.damping, C.mass); x += tx;
+    [y, vy] = springStep(y - ty, vy, dt, C.stiffness, C.damping, C.mass); y += ty;
+    render();
+    // Sleep once the ring has caught up; the next mousemove wakes it.
+    if (Math.abs(x - tx) + Math.abs(y - ty) < 0.05 && Math.abs(vx) + Math.abs(vy) < 0.05) {
+      x = tx; y = ty; vx = vy = 0; render(); running = false; return;
+    }
+    requestAnimationFrame(loop);
+  };
+  const wake = () => {
+    if (running) return;
+    running = true; last = performance.now(); requestAnimationFrame(loop);
+  };
+
   addEventListener("mousemove", (e) => {
-    tx = e.clientX + 20;
-    ty = e.clientY - 14 + 20;
+    tx = e.clientX + C.offsetX;
+    ty = e.clientY - C.size / 2 + C.offsetY;
     if (!shown) {
-      x = tx; y = ty; shown = true;
+      x = tx; y = ty; vx = vy = 0; shown = true; render();
       cursor.style.opacity = 1;
       document.documentElement.classList.add("cursor-none");
     }
-  });
+    wake();
+  }, { passive: true });
+
   const hideRing = () => {
     cursor.style.opacity = 0; shown = false;
     document.documentElement.classList.remove("cursor-none");
@@ -51,88 +153,142 @@ if (cursor && desktopCursor.matches) {
   // The page stops getting mousemove inside an iframe (Glyph Clock, the
   // interactive embeds), so hide the ring there instead of leaving it frozen.
   document.querySelectorAll("iframe").forEach((f) => f.addEventListener("mouseenter", hideRing));
-  let last = performance.now();
-  (function loop(now) {
-    const dt = Math.min((now - last) / 1000, 1 / 30);
-    last = now;
-    // Implicit (backward) Euler: stable at any frame rate. The old explicit
-    // step blew up whenever a sub-step exceeded 2*mass/damping (~4ms), i.e.
-    // on 60Hz screens or after a dropped frame, flinging the ring off-screen.
-    const k = stiffness / mass, c = damping / mass;
-    for (let i = 0; i < 4; i++) {
-      const h = dt / 4, denom = 1 + h * c + h * h * k;
-      vx = (vx + h * k * (tx - x)) / denom;
-      vy = (vy + h * k * (ty - y)) / denom;
-      x += vx * h;
-      y += vy * h;
-    }
-    if (!Number.isFinite(x) || !Number.isFinite(y)) { x = tx; y = ty; vx = vy = 0; }
-    cursor.style.transform = `translate(${x}px, ${y}px)`;
-    requestAnimationFrame(loop);
-  })(last);
 }
 
 // ---------- Falling pills (homepage hero) ----------
-// Port of the Framer "Physics" component: random start positions, gravity 0.3,
-// walls on all sides, drag with mouse or touch.
+// Port of the Framer "Physics" component: random start positions, gravity,
+// walls on all sides, drag with mouse or touch. Pills are the real DOM
+// elements, moved with transforms.
 function startPhysics(stage, { sleeping }) {
-  const { Engine, World, Bodies, Composites, Mouse, MouseConstraint, Composite } = Matter;
-  const rect = stage.getBoundingClientRect();
-  const engine = Engine.create({ enableSleeping: sleeping, gravity: { x: 0, y: 0.3 } });
+  const { Engine, World, Bodies, Body, Mouse, MouseConstraint, Composite, Bounds, Sleeping } = Matter;
+  const P = MOTION.physics;
+  const engine = Engine.create({ enableSleeping: sleeping, gravity: { x: 0, y: P.gravityY } });
+  let W = stage.clientWidth, H = stage.clientHeight;
 
-  const wall = { isStatic: true, friction: 2 };
-  World.add(engine.world, [
-    Bodies.rectangle(rect.width / 2, rect.height + 50, rect.width + 100, 100, wall),
-    Bodies.rectangle(rect.width / 2, -50, rect.width + 100, 100, wall),
-    Bodies.rectangle(rect.width + 50, rect.height / 2, 100, rect.height, wall),
-    Bodies.rectangle(-50, rect.height / 2, 100, rect.height, wall),
-  ]);
+  // Walls: 100px thick, just outside the visible stage on all four sides.
+  const T = 100;
+  const wallOpts = { isStatic: true, friction: P.wallFriction };
+  const walls = [0, 1, 2, 3].map(() => Bodies.rectangle(0, 0, 1, 1, wallOpts));
+  const placeWalls = () => {
+    const spec = [
+      [W / 2, H + T / 2, W + 2 * T, T], [W / 2, -T / 2, W + 2 * T, T],
+      [W + T / 2, H / 2, T, H + 2 * T], [-T / 2, H / 2, T, H + 2 * T],
+    ];
+    walls.forEach((wall, i) => {
+      const [cx, cy, w, h] = spec[i];
+      Body.setVertices(wall, [{ x: cx - w / 2, y: cy - h / 2 }, { x: cx + w / 2, y: cy - h / 2 },
+        { x: cx + w / 2, y: cy + h / 2 }, { x: cx - w / 2, y: cy + h / 2 }]);
+      Body.setPosition(wall, { x: cx, y: cy });
+    });
+  };
+  placeWalls();
+  World.add(engine.world, walls);
 
+  // Pills: measured once (they're rigid), spawned at random spots inside the
+  // stage, retrying so they don't start overlapping each other or a wall.
+  const els = [...stage.children];
+  const sizes = els.map((el) => { const r = el.getBoundingClientRect(); return { w: r.width, h: r.height }; });
+  const bodies = [];
+  sizes.forEach(({ w, h }) => {
+    let x, y;
+    for (let t = 0; t < P.spawnTries; t++) {
+      x = w / 2 + Math.random() * Math.max(0, W - w);
+      y = h / 2 + Math.random() * Math.max(0, H - h);
+      const box = { min: { x: x - w / 2, y: y - h / 2 }, max: { x: x + w / 2, y: y + h / 2 } };
+      if (!bodies.some((b) => Bounds.overlaps(b.bounds, box))) break;
+    }
+    bodies.push(Bodies.rectangle(x, y, w, h, {
+      density: P.density, friction: P.friction, frictionAir: P.frictionAir, restitution: P.restitution,
+    }));
+  });
+  World.add(engine.world, bodies);
+
+  // Dragging. Matter's wheel/touch listeners are removed so the page still
+  // scrolls over the hero; touch is re-added so a pill can be dragged on phones.
   const mouse = Mouse.create(stage);
   const drag = MouseConstraint.create(engine, {
     mouse,
-    constraint: { angularStiffness: 0, stiffness: 1 },
+    constraint: { stiffness: P.dragStiffness, angularStiffness: P.dragAngularStiffness, render: { visible: false } },
   });
   Composite.add(engine.world, drag);
-  ["mousewheel", "DOMMouseScroll", "touchstart", "touchmove", "touchend"].forEach((type) =>
-    drag.mouse.element.removeEventListener(type, drag.mouse[type])
+  ["mousewheel", "DOMMouseScroll", "wheel", "touchstart", "touchmove", "touchend"].forEach((type) =>
+    mouse.element.removeEventListener(type, mouse[type])
   );
-  stage.addEventListener("touchstart", drag.mouse.mousedown, { passive: true });
-  stage.addEventListener("touchmove", (e) => { if (drag.body) drag.mouse.mousemove(e); });
-  stage.addEventListener("touchend", (e) => { if (drag.body) drag.mouse.mouseup(e); });
-  stage.addEventListener("mouseleave", (e) => drag.mouse.mouseup(e));
+  stage.addEventListener("touchstart", mouse.mousedown, { passive: true });
+  stage.addEventListener("touchmove", (e) => {
+    if (!drag.body) return;
+    e.preventDefault();       // dragging a pill shouldn't also scroll the page
+    mouse.mousemove(e);
+  }, { passive: false });
+  stage.addEventListener("touchend", (e) => { if (drag.body) mouse.mouseup(e); });
+  stage.addEventListener("mouseleave", (e) => mouse.mouseup(e));
 
-  const els = [...stage.children];
-  const stack = Composites.stack(0, 0, els.length, 1, 0, 0, (sx, sy, i) => {
-    const { width, height } = els[i].getBoundingClientRect();
-    const x = Math.floor(Math.random() * (rect.width - width));
-    const y = Math.floor(Math.random() * (rect.height - height));
-    return Bodies.rectangle(x, y, width, height, {
-      isStatic: false, density: 0.001, friction: 0.05, frictionAir: 0.01,
-    });
-  });
-  World.add(engine.world, stack);
+  // Keep every pill inside the stage, even after a very fast throw or a resize.
+  // Uses the rotated bounding box, with a little slack for normal contact.
+  const SLACK = 4;
+  const contain = (body) => {
+    const { min, max } = body.bounds;
+    let dx = 0, dy = 0;
+    if (min.x < -SLACK) dx = -min.x; else if (max.x > W + SLACK) dx = W - max.x;
+    if (min.y < -SLACK) dy = -min.y; else if (max.y > H + SLACK) dy = H - max.y;
+    if (dx || dy) {
+      Body.translate(body, { x: dx, y: dy });
+      Body.setVelocity(body, { x: 0, y: 0 });
+      Sleeping.set(body, false);
+    }
+  };
 
-  (function frame() {
-    requestAnimationFrame(frame);
-    stack.bodies.forEach((body, i) => {
-      const el = els[i];
-      const { x, y } = body.vertices[0];
-      el.style.visibility = "visible";
-      el.style.top = `${y}px`;
-      el.style.left = `${x}px`;
-      el.style.transform = `translate(-50%, -50%) rotate(${body.angle}rad) translate(50%, 50%)`;
+  const render = () => {
+    bodies.forEach((body, i) => {
+      const { w, h } = sizes[i];
+      els[i].style.transform =
+        `translate3d(${body.position.x - w / 2}px, ${body.position.y - h / 2}px, 0) rotate(${body.angle}rad)`;
     });
-    Engine.update(engine);
-  })();
+  };
+  render();
+  els.forEach((el) => (el.style.visibility = "visible"));
+
+  // Fixed-step loop: same fall speed on 60Hz and 120Hz screens. Paused while
+  // the hero is off-screen, hidden by a breakpoint, or the tab is hidden.
+  let running = false, onScreen = false, last = 0, acc = 0;
+  const loop = (now) => {
+    if (!running) return;
+    acc += Math.min(now - last, P.stepMs * P.maxStepsPerFrame);
+    last = now;
+    while (acc >= P.stepMs) { Engine.update(engine, P.stepMs); acc -= P.stepMs; }
+    bodies.forEach(contain);
+    render();
+    requestAnimationFrame(loop);
+  };
+  const setRunning = () => {
+    const want = onScreen && !document.hidden;
+    if (want && !running) { running = true; last = performance.now(); acc = 0; requestAnimationFrame(loop); }
+    if (!want) running = false;
+  };
+  new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; setRunning(); }).observe(stage);
+  document.addEventListener("visibilitychange", setRunning);
+
+  // On resize, move the walls to the new edges and nudge pills back inside —
+  // no restart, so whatever the visitor arranged stays put.
+  new ResizeObserver(() => {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    if (!w || !h || (w === W && h === H)) return;
+    W = w; H = h;
+    placeWalls();
+    bodies.forEach(contain);
+    bodies.forEach((b) => Sleeping.set(b, false));
+    render();
+  }).observe(stage);
 }
 
 if (window.Matter) {
   const stages = [...document.querySelectorAll("[data-physics]")];
   const started = new Set();
+  // Desktop and phone each have their own pill set; start a set the first
+  // time it's actually displayed (it may only appear after a resize).
   const startVisible = () => {
     stages.forEach((stage) => {
-      if (started.has(stage) || stage.offsetParent === null) return;
+      if (started.has(stage) || stage.offsetParent === null || !stage.clientHeight) return;
       started.add(stage);
       startPhysics(stage, { sleeping: stage.dataset.physics === "sleep" });
     });

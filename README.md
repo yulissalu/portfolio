@@ -37,6 +37,14 @@ Then open http://localhost:8000.
   - Project titles slide up word by word.
   - Playground images ease from 110% to 100% as you scroll.
 
+## Tuning motion
+
+Every scroll, cursor, and physics number lives in the `MOTION` object at the top of `js/main.js`.
+
+- **Scroll** (`MOTION.scroll`): `lerp` is the main dial. Lower (e.g. `0.07`) glides longer and lags more; higher (e.g. `0.15`) feels snappier. `wheelMultiplier` changes how far each wheel tick goes. Smooth scroll uses [Lenis](https://github.com/darkroomengineering/lenis) (`js/vendor/lenis.min.js`), applies to wheel and trackpad only, and turns off for reduced motion.
+- **Cursor** (`MOTION.cursor`): a spring, in the same units as Framer's spring transition. Raise `stiffness` or lower `mass` to make the ring catch up faster; raise `damping` to remove any overshoot. `offsetX`/`offsetY` place the ring relative to the pointer.
+- **Pills** (`MOTION.physics`): `gravityY` sets fall speed, `frictionAir` slows falling and drifting, `restitution` adds bounce (0 = none), `friction` controls sliding, and `dragAngularStiffness` controls whether a dragged pill swings (0) or stays upright (1).
+
 ## Editing tips
 
 - The header and footer are copied into each page. If you change one, change it on every page.

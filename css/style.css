@@ -191,6 +191,11 @@ p, .p { font-size: 20px; line-height: 1.2; }
   justify-content: flex-end;
 }
 
+/* Smooth scrolling — required by Lenis (js/vendor/lenis.min.js) */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis.lenis-smooth iframe { pointer-events: none; } /* only while a scroll is gliding */
+
 /* Falling pills — Matter.js positions each .pill (see js/main.js) */
 .physics {
   position: relative;
